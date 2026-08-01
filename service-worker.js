@@ -1,4 +1,4 @@
-const CACHE='tc-alpha-0-1-v1';
+const CACHE='tc-alpha-0-2-v1';
 const FILES=['./','./index.html','./manifest.webmanifest','./assets/icon-192.png','./assets/icon-512.png',
 './assets/images/nyhavn.jpg','./assets/images/amalienborg.jpg','./assets/images/rundetaarn.jpg',
 './assets/images/rosenborg.jpg','./assets/images/torvehallerne.jpg','./assets/images/little_mermaid.jpg'];

@@ -11,25 +11,49 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <title>Travel Companion Alpha</title>
 <style>
-:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#13243a;--line:#28415f;--text:#f7f9fc;--muted:#aeb9c8;--accent:#ff7a1a;--green:#4fd17a;--blue:#5ba9ff}
+:root{--country:#c8102e;--country-dark:#8f0b22;--country-soft:#f7e7eb;--country-on:#ffffff;--bg:#07111f;--panel:#0d1b2d;--panel2:#13243a;--line:#28415f;--text:#f7f9fc;--muted:#aeb9c8;--accent:var(--country);--green:#4fd17a;--blue:#5ba9ff}
 *{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
 button{font:inherit}.app{height:100dvh;display:grid;grid-template-rows:auto 1fr}
 .top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:#07111fee;border-bottom:1px solid var(--line);z-index:1001}
-.logo{width:38px;height:38px;border-radius:12px;background:#b20d21;display:grid;place-items:center}.title{min-width:0}.title b,.title span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title span{font-size:12px;color:var(--muted)}.grow{flex:1}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--country);display:grid;place-items:center}.title{min-width:0}.title b,.title span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title span{font-size:12px;color:var(--muted)}.grow{flex:1}
 .icon{border:1px solid var(--line);background:#102139;color:white;border-radius:12px;height:40px;min-width:40px;padding:0 10px}
 .work{position:relative;min-height:0}#map{position:absolute;inset:0}.leaflet-control-attribution{font-size:9px}
 .sheet{position:absolute;left:0;right:0;bottom:0;height:145px;background:linear-gradient(#0e2035,#091727);border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;z-index:900;transition:height .25s;overflow:hidden;box-shadow:0 -18px 45px #0008}
 .sheet.mid{height:62%}.sheet.full{height:92%}.handle-zone{padding:9px 0 6px}.handle{width:52px;height:5px;border-radius:99px;background:#64758a;margin:auto}
 .sheet-head{display:flex;gap:10px;align-items:center;padding:0 14px 12px}.sheet-head img{width:76px;height:58px;object-fit:cover;border-radius:12px}.sheet-main{min-width:0;flex:1}.sheet-main h2{font-size:19px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sheet-main p{margin:3px 0 0;color:var(--muted);font-size:13px}.progress{font-size:13px;color:#9df1b5}
-.content{height:calc(100% - 92px);overflow:auto;padding:0 14px 105px}.tabs{display:flex;gap:7px;overflow:auto;padding-bottom:12px;position:sticky;top:0;background:#0e2035;z-index:4}.tab{white-space:nowrap;border:1px solid var(--line);background:#152a45;color:var(--muted);padding:9px 12px;border-radius:99px}.tab.on{background:var(--accent);color:white;border-color:transparent}
+.content{height:calc(100% - 92px);overflow:auto;padding:0 14px 105px}.tabs{display:flex;gap:7px;overflow:auto;padding-bottom:12px;position:sticky;top:0;background:#0e2035;z-index:4}.tab{white-space:nowrap;border:1px solid var(--line);background:#152a45;color:var(--muted);padding:9px 12px;border-radius:99px}.tab.on{background:var(--country);color:white;border-color:transparent}
 .section-title{display:flex;justify-content:space-between;align-items:center;margin:9px 0}.section-title h3{font-size:16px;margin:0}.muted{font-size:13px;color:var(--muted)}
-.timeline{display:grid;gap:9px}.stop{display:grid;grid-template-columns:34px 66px 1fr auto;gap:9px;align-items:center;background:#102139;border:1px solid var(--line);border-radius:16px;padding:9px}.stop img{width:66px;height:54px;object-fit:cover;border-radius:10px}.num{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-weight:800}.stop.done{opacity:.55}.stop b{display:block}.check{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#0a1728;color:white}.check.done{background:var(--green);border:0}
+.timeline{display:grid;gap:9px}.stop{display:grid;grid-template-columns:34px 66px 1fr auto;gap:9px;align-items:center;background:#102139;border:1px solid var(--line);border-radius:16px;padding:9px}.stop img{width:66px;height:54px;object-fit:cover;border-radius:10px}.num{width:30px;height:30px;border-radius:50%;background:var(--country);display:grid;place-items:center;font-weight:800}.stop.done{opacity:.55}.stop b{display:block}.check{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#0a1728;color:white}.check.done{background:var(--green);border:0}
 .cards{display:grid;gap:10px}.place-card{display:grid;grid-template-columns:92px 1fr;gap:11px;background:#102139;border:1px solid var(--line);border-radius:17px;padding:10px}.place-card img{width:92px;height:82px;object-fit:cover;border-radius:12px}.place-card h3{margin:0 0 4px;font-size:16px}.place-card p{margin:0;color:var(--muted);font-size:13px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.small{border:1px solid var(--line);background:#152a45;color:white;border-radius:10px;padding:8px 10px}
 .hero{height:190px;border-radius:18px;background-size:cover;background-position:center;display:flex;align-items:end;padding:16px;box-shadow:inset 0 -90px 70px #0009}.hero h2{margin:0;font-size:28px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.metric{background:#152a45;border-radius:12px;padding:9px;text-align:center;font-size:11px}.metric b{display:block;font-size:14px}.guide p{color:var(--muted);line-height:1.55}
 .status{position:absolute;left:12px;top:12px;z-index:700;background:#0d1b2dee;border:1px solid var(--line);border-radius:99px;padding:7px 10px;font-size:12px}.maptools{position:absolute;right:12px;top:12px;z-index:700;display:grid;gap:8px}.maptools button{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:#0d1b2dee;color:white}
-.hub{position:absolute;right:14px;bottom:158px;z-index:950;width:54px;height:54px;border-radius:50%;border:0;background:var(--accent);color:white;font-size:22px;box-shadow:0 10px 30px #0009}.hubmenu{position:absolute;right:14px;bottom:222px;z-index:960;width:min(300px,calc(100% - 28px));display:none;background:#0e2035;border:1px solid var(--line);border-radius:18px;padding:9px}.hubmenu.open{display:block}.hubmenu button{width:100%;text-align:left;border:0;background:transparent;color:white;padding:12px;border-radius:11px}
+.hub{position:absolute;right:14px;bottom:158px;z-index:950;width:54px;height:54px;border-radius:50%;border:0;background:var(--country);color:var(--country-on);font-size:22px;box-shadow:0 10px 30px #0009}.hubmenu{position:absolute;right:14px;bottom:222px;z-index:960;width:min(300px,calc(100% - 28px));display:none;background:#0e2035;border:1px solid var(--line);border-radius:18px;padding:9px}.hubmenu.open{display:block}.hubmenu button{width:100%;text-align:left;border:0;background:transparent;color:white;padding:12px;border-radius:11px}
 .toast{position:absolute;left:50%;bottom:165px;transform:translateX(-50%);z-index:1100;background:#07111f;border:1px solid var(--line);border-radius:99px;padding:8px 12px;display:none;white-space:nowrap}.toast.show{display:block}
-@media(orientation:landscape) and (max-height:650px){.work{display:grid;grid-template-columns:1.55fr .85fr}#map{position:relative;grid-column:1}.sheet,.sheet.mid,.sheet.full{position:relative;grid-column:2;height:auto!important;border-radius:0;border-top:0}.handle-zone{display:none}.hub{right:calc(36% + 14px);bottom:14px}.hubmenu{right:calc(36% + 14px);bottom:76px}}
+
+.route-control{
+  position:absolute;left:12px;right:78px;bottom:158px;z-index:945;
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:rgba(13,27,45,.95);border:1px solid var(--line);border-radius:15px;
+  box-shadow:0 10px 28px rgba(0,0,0,.32);backdrop-filter:blur(14px)
+}
+.route-control.hidden{display:none}
+.route-info{min-width:0;flex:1}
+.route-info b,.route-info span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route-info span{font-size:12px;color:var(--muted);margin-top:2px}
+.route-toggle{
+  border:1px solid rgba(255,255,255,.2);background:var(--country);color:white;
+  border-radius:11px;padding:9px 11px;font-weight:700
+}
+.stop.dragging{opacity:.88;transform:scale(1.02);box-shadow:0 16px 34px rgba(0,0,0,.38);border-color:var(--country)}
+.stop.drop-before{box-shadow:0 -3px 0 var(--country)}
+.stop.drop-after{box-shadow:0 3px 0 var(--country)}
+.stop{touch-action:pan-y}
+.handle-zone{touch-action:none;cursor:grab}
+.handle-zone.dragging{cursor:grabbing}
+.hub-backdrop{position:absolute;inset:0;z-index:955;background:rgba(0,0,0,.14);display:none}
+.hub-backdrop.open{display:block}
+
+@media(orientation:landscape) and (max-height:650px){.work{display:grid;grid-template-columns:1.55fr .85fr}#map{position:relative;grid-column:1}.sheet,.sheet.mid,.sheet.full{position:relative;grid-column:2;height:auto!important;border-radius:0;border-top:0}.handle-zone{display:none}.hub{right:calc(36% + 14px);bottom:14px}.route-control{right:calc(36% + 78px);bottom:14px}.hubmenu{right:calc(36% + 14px);bottom:76px}}
 </style>
 </head>
 <body>
@@ -39,10 +63,16 @@ button{font:inherit}.app{height:100dvh;display:grid;grid-template-rows:auto 1fr}
 <div id="map"></div>
 <div class="status" id="status">🟢 Friss · demo</div>
 <div class="maptools"><button id="gps">◎</button><button id="radar">◉</button></div>
+<div class="route-control" id="routeControl">
+  <div>🧭</div>
+  <div class="route-info"><b id="routeTarget">Útvonal: Torvehallerne</b><span id="routeMeta">Következő állomás · bemutató útvonal</span></div>
+  <button class="route-toggle" id="routeToggle">Elrejtés</button>
+</div>
+<div class="hub-backdrop" id="hubBackdrop"></div>
 <button class="hub" id="hub">◎</button>
 <div class="hubmenu" id="hubmenu"><button>📅 Mai nap</button><button>🧳 Utazások</button><button>🌍 My Travels</button><button>⚙ Beállítások</button></div>
 <section class="sheet" id="sheet">
-<div class="handle-zone" id="handle"><div class="handle"></div></div>
+<div class="handle-zone" id="handle" aria-label="Panel húzása"><div class="handle"></div></div>
 <div class="sheet-head"><img id="nextImg" src="assets/images/torvehallerne.jpg"><div class="sheet-main"><h2 id="nextName">Következő: Torvehallerne</h2><p id="nextMeta">10:00 · 40–60 perc</p></div><div class="progress" id="progress">0 / 6</div></div>
 <div class="content">
 <div class="tabs"><button class="tab on" data-view="timeline">Idővonal</button><button class="tab" data-view="around">Körülöttem</button><button class="tab" data-view="guide">Guide</button><button class="tab" data-view="saved">Mentettek</button></div>
@@ -60,12 +90,12 @@ const save=()=>localStorage.setItem('tc-alpha-state',JSON.stringify(state));
 const byId=id=>places.find(p=>p.id===id);
 const map=L.map('map',{zoomControl:false}).setView([55.684,12.585],14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
-const line=L.polyline(places.map(p=>[p.lat,p.lng]),{color:'#318cff',weight:5,opacity:.8,dashArray:'8 8'}).addTo(map);
+const line=L.polyline(places.map(p=>[p.lat,p.lng]),{color:'#c8102e',weight:5,opacity:.88,dashArray:'8 8'}).addTo(map);
 const markers={};
 places.forEach((p,i)=>{markers[p.id]=L.marker([p.lat,p.lng]).addTo(map).bindTooltip(`${i+1}. ${p.name}`);markers[p.id].on('click',()=>selectPlace(p.id,true));});
 function selectPlace(id,openGuide=false){
  state.selected=id;save();const p=byId(id);
- document.getElementById('nextImg').src=p.image;document.getElementById('nextName').textContent='Következő: '+p.name;document.getElementById('nextMeta').textContent=p.time+' · '+p.duration;
+ document.getElementById('nextImg').src=p.image;document.getElementById('nextName').textContent='Következő: '+p.name;document.getElementById('nextMeta').textContent=p.time+' · '+p.duration;document.getElementById('routeTarget').textContent='Útvonal: '+p.name;
  map.panTo([p.lat,p.lng]);renderGuide();
  if(openGuide) switchView('guide');
 }
@@ -74,6 +104,43 @@ function renderTimeline(){
  box.innerHTML='<div class="section-title"><h3>Mai útiterv</h3><span class="muted">Valós koppenhágai helyek</span></div><div class="timeline">'+places.map((p,i)=>`<article class="stop ${state.done.includes(p.id)?'done':''}" data-id="${p.id}"><div class="num">${i+1}</div><img src="${p.image}"><div><b>${p.name}</b><span class="muted">${p.time} · ${p.duration}</span></div><button class="check ${state.done.includes(p.id)?'done':''}" data-check="${p.id}">${state.done.includes(p.id)?'✓':'○'}</button></article>`).join('')+'</div>';
  box.querySelectorAll('.stop').forEach(el=>el.addEventListener('click',e=>{if(!e.target.dataset.check)selectPlace(el.dataset.id,true)}));
  box.querySelectorAll('[data-check]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const id=btn.dataset.check;state.done=state.done.includes(id)?state.done.filter(x=>x!==id):[...state.done,id];save();renderAll();}));
+ enableTimelineReorder();
+}
+function enableTimelineReorder(){
+ const list=document.querySelector('#timeline .timeline');if(!list)return;
+ let dragged=null,startY=0,longTimer=null,moved=false;
+ list.querySelectorAll('.stop').forEach(item=>{
+   item.addEventListener('pointerdown',e=>{
+     if(e.target.closest('button'))return;
+     startY=e.clientY;moved=false;
+     longTimer=setTimeout(()=>{
+       dragged=item;item.classList.add('dragging');item.setPointerCapture(e.pointerId);
+       if(navigator.vibrate)navigator.vibrate(18);
+     },260);
+   });
+   item.addEventListener('pointermove',e=>{
+     if(Math.abs(e.clientY-startY)>8)moved=true;
+     if(!dragged){if(moved&&longTimer){clearTimeout(longTimer);longTimer=null}return}
+     e.preventDefault();
+     const others=[...list.querySelectorAll('.stop:not(.dragging)')];
+     others.forEach(x=>x.classList.remove('drop-before','drop-after'));
+     const target=others.find(x=>e.clientY<x.getBoundingClientRect().top+x.getBoundingClientRect().height/2);
+     if(target){target.classList.add('drop-before');list.insertBefore(dragged,target)}
+     else list.appendChild(dragged);
+   });
+   const finish=()=>{
+     if(longTimer){clearTimeout(longTimer);longTimer=null}
+     if(dragged){
+       dragged.classList.remove('dragging');
+       [...list.children].forEach(x=>x.classList.remove('drop-before','drop-after'));
+       const order=[...list.children].map(x=>x.dataset.id);
+       places.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+       dragged=null;save();renderAll();toast('Útiterv sorrendje frissítve');
+     }
+   };
+   item.addEventListener('pointerup',finish);
+   item.addEventListener('pointercancel',finish);
+ });
 }
 function renderAround(){
  const box=document.getElementById('around');
@@ -96,12 +163,59 @@ function renderSaved(){
 }
 function toggleSaved(id){state.saved=state.saved.includes(id)?state.saved.filter(x=>x!==id):[...state.saved,id];save();renderAll();toast(state.saved.includes(id)?'Elmentve későbbre':'Eltávolítva');}
 function renderAll(){renderTimeline();renderAround();renderGuide();renderSaved();document.getElementById('progress').textContent=state.done.length+' / '+places.length;}
-function switchView(v){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.view===v));['timeline','around','guide','saved'].forEach(id=>document.getElementById(id).hidden=id!==v);const s=document.getElementById('sheet');if(!s.classList.contains('mid')&&!s.classList.contains('full'))s.classList.add('mid');}
+function switchView(v){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.view===v));['timeline','around','guide','saved'].forEach(id=>document.getElementById(id).hidden=id!==v);const s=document.getElementById('sheet');if(sheetState===0)snapSheet(1);}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
-let sheetState=0;document.getElementById('handle').onclick=()=>{sheetState=(sheetState+1)%3;const s=document.getElementById('sheet');s.className='sheet'+(sheetState===1?' mid':sheetState===2?' full':'');};
-document.getElementById('hub').onclick=()=>document.getElementById('hubmenu').classList.toggle('open');
+let sheetState=0;
+const sheet=document.getElementById('sheet');
+const handle=document.getElementById('handle');
+const snapRatios=[0.145,0.62,0.92];
+function applySheetRatio(ratio,animate=true){
+  sheet.style.transition=animate?'height .24s cubic-bezier(.2,.8,.2,1)':'none';
+  sheet.style.height=Math.round(window.innerHeight*ratio)+'px';
+  sheet.classList.remove('mid','full');
+}
+function snapSheet(target){
+  sheetState=Math.max(0,Math.min(2,target));
+  applySheetRatio(snapRatios[sheetState],true);
+}
+snapSheet(0);
+let sheetDrag=null;
+handle.addEventListener('pointerdown',e=>{
+  sheetDrag={startY:e.clientY,startH:sheet.getBoundingClientRect().height};
+  handle.setPointerCapture(e.pointerId);
+  handle.classList.add('dragging');
+  sheet.style.transition='none';
+});
+handle.addEventListener('pointermove',e=>{
+  if(!sheetDrag)return;
+  const next=Math.max(window.innerHeight*.13,Math.min(window.innerHeight*.94,sheetDrag.startH+(sheetDrag.startY-e.clientY)));
+  sheet.style.height=next+'px';
+});
+handle.addEventListener('pointerup',e=>{
+  if(!sheetDrag)return;
+  const ratio=sheet.getBoundingClientRect().height/window.innerHeight;
+  let nearest=0,dist=Infinity;
+  snapRatios.forEach((r,i)=>{const d=Math.abs(r-ratio);if(d<dist){dist=d;nearest=i}});
+  sheetDrag=null;handle.classList.remove('dragging');snapSheet(nearest);
+});
+handle.addEventListener('pointercancel',()=>{sheetDrag=null;handle.classList.remove('dragging');snapSheet(sheetState)});
+handle.addEventListener('click',e=>{if(e.detail===0)snapSheet((sheetState+1)%3)});
+window.addEventListener('resize',()=>snapSheet(sheetState));
+const hub=document.getElementById('hub'),hubmenu=document.getElementById('hubmenu'),hubBackdrop=document.getElementById('hubBackdrop');
+function setHub(open){hubmenu.classList.toggle('open',open);hubBackdrop.classList.toggle('open',open)}
+hub.onclick=e=>{e.stopPropagation();setHub(!hubmenu.classList.contains('open'))};
+hubmenu.onclick=e=>e.stopPropagation();
+hubBackdrop.onclick=()=>setHub(false);
+document.addEventListener('pointerdown',e=>{if(hubmenu.classList.contains('open')&&!hubmenu.contains(e.target)&&e.target!==hub)setHub(false)});
 document.getElementById('sync').onclick=()=>{document.getElementById('status').textContent='↻ Frissítés...';setTimeout(()=>{document.getElementById('status').textContent='🟢 Friss · most';toast('Demo-adatok frissítve')},700);};
-document.getElementById('layers').onclick=()=>{if(map.hasLayer(line))map.removeLayer(line);else line.addTo(map);toast(map.hasLayer(line)?'Napi útvonal bekapcsolva':'Napi útvonal elrejtve');};
+const routeToggle=document.getElementById('routeToggle');
+function setRouteVisible(show){
+  if(show&&!map.hasLayer(line))line.addTo(map);
+  if(!show&&map.hasLayer(line))map.removeLayer(line);
+  routeToggle.textContent=show?'Elrejtés':'Mutatás';
+}
+routeToggle.onclick=()=>{const show=!map.hasLayer(line);setRouteVisible(show);toast(show?'Útvonal megjelenítve':'Útvonal elrejtve')};
+document.getElementById('layers').onclick=()=>toast('Rétegek: az aktív útvonal külön kapcsolóval kezelhető');
 document.getElementById('radar').onclick=()=>switchView('around');
 document.getElementById('gps').onclick=()=>{if(!navigator.geolocation)return toast('A böngésző nem támogatja a GPS-t');navigator.geolocation.getCurrentPosition(pos=>{L.circleMarker([pos.coords.latitude,pos.coords.longitude],{radius:9,color:'#fff',fillColor:'#318cff',fillOpacity:1}).addTo(map);map.setView([pos.coords.latitude,pos.coords.longitude],16);toast('Saját helyzet megjelenítve')},()=>toast('A helyzet nem érhető el'));};
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1400)}
