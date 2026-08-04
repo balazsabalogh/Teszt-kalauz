@@ -1,0 +1,8 @@
+{
+  "name": "Travel Companion Alpha",
+  "short_name": "Travel Companion",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#08111d",
+  "theme_color": "#08111d"
+}
