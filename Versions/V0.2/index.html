@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#08111d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<title>Travel Companion Alpha v0.2 – Budapest</title>
+<style>
+:root{--bg:#08111d;--panel:#0e1b2b;--panel2:#14273e;--line:#2b4058;--text:#f7f9fc;--muted:#aeb9c8;--accent:#c8102e;--blue:#4da3ff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body,#app{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button{font:inherit;cursor:pointer}
+#map{position:absolute;inset:0;background:#17324a}
+.leaflet-control-attribution{font-size:9px!important}
+.leaflet-bar a{background:#0c1928!important;color:white!important;border-color:#2b4058!important}
+.tc-marker{display:grid;place-items:center;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#fff;color:#111;border:2px solid #08111d;box-shadow:0 7px 18px #0006}
+.tc-marker span{transform:rotate(45deg);font-size:11px;font-weight:800}
+.tc-marker.wc{background:var(--blue);color:white}.tc-marker.food{background:#f0aa45}.tc-marker.bar{background:#8f62d8;color:white}
+.top-strip{position:absolute;left:0;right:0;top:0;height:27px;z-index:1000;display:flex;justify-content:center}.pull-tab{width:66px;height:5px;margin-top:8px;border-radius:99px;background:#fffbd}
+.top-menu{position:absolute;left:10px;right:10px;top:10px;z-index:1100;background:#0a1523fa;border:1px solid var(--line);border-radius:24px;padding:18px 14px 14px;transform:translateY(-120%);transition:transform .28s cubic-bezier(.2,.8,.2,1);backdrop-filter:blur(18px)}.top-menu.open{transform:translateY(0)}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.menu-item{border:1px solid var(--line);background:var(--panel2);color:white;border-radius:15px;padding:13px;text-align:left}
+.status{position:absolute;left:12px;top:35px;z-index:900;background:#08111de9;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:12px;backdrop-filter:blur(12px)}
+.locate{position:absolute;right:12px;top:35px;z-index:900;width:44px;height:44px;border:1px solid var(--line);background:#08111de9;color:white;border-radius:14px}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:950;height:92px;background:linear-gradient(#102136,#0b1726);border-top:1px solid var(--line);border-radius:26px 26px 0 0;overflow:hidden;box-shadow:0 -18px 40px #0006;will-change:height;transition:height .34s cubic-bezier(.22,.85,.22,1)}
+.sheet.dragging{transition:none}
+.handle-zone{height:34px;display:flex;align-items:center;justify-content:center;touch-action:none}.handle{width:54px;height:5px;border-radius:99px;background:#6b7b8e}
+.sheet-head{padding:0 14px 10px;display:flex;align-items:center;gap:10px;touch-action:none}.sheet-head .main{flex:1;min-width:0}.sheet-head h2{font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sheet-head p{font-size:12px;color:var(--muted);margin:3px 0}
+.sheet-content{height:calc(100% - 78px);overflow:auto;padding:0 14px 120px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.chip{border:1px solid var(--line);background:var(--panel2);color:white;border-radius:999px;padding:9px 11px}
+.card{display:flex;gap:10px;align-items:center;background:#152942;border:1px solid var(--line);border-radius:16px;padding:10px;margin:8px 0}.card.active{border-color:var(--accent)}
+.thumb{width:60px;height:52px;border-radius:11px;background:linear-gradient(135deg,#d35a3a,#f1b45d 35%,#5ba4c8 36% 58%,#bd4c3f 59%);flex:0 0 auto}
+.card-main{flex:1;min-width:0}.card b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card span{font-size:12px;color:var(--muted)}
+.icon-btn{width:35px;height:35px;border-radius:11px;border:1px solid var(--line);background:#102139;color:white}
+.context{position:absolute;left:50%;bottom:17px;z-index:1050;transform:translateX(-50%);width:58px;height:58px;border-radius:50%;border:1px solid #fff3;background:var(--accent);color:white;font-size:22px;box-shadow:0 12px 34px #0008}
+.context-menu{position:absolute;left:50%;bottom:82px;z-index:1040;transform:translateX(-50%) scale(.92);opacity:0;pointer-events:none;transition:.2s;background:#0a1523fa;border:1px solid var(--line);border-radius:18px;padding:8px;min-width:260px}.context-menu.open{transform:translateX(-50%) scale(1);opacity:1;pointer-events:auto}
+.ca{width:100%;border:0;background:transparent;color:white;text-align:left;padding:12px;border-radius:12px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.metric{background:#172a42;border-radius:11px;padding:9px;text-align:center;font-size:10px}.metric b{display:block;font-size:13px}
+.description{color:#c5ced9;line-height:1.55;font-size:14px}
+.daytabs{display:flex;gap:7px;overflow:auto;padding-bottom:4px}.daytabs button{border:1px solid var(--line);background:#13243a;color:white;border-radius:999px;padding:8px 11px;white-space:nowrap}.daytabs button.active{background:var(--accent)}
+.toast{position:absolute;left:50%;bottom:125px;z-index:1200;transform:translateX(-50%);background:#07111f;border:1px solid var(--line);border-radius:999px;padding:9px 13px;opacity:0;transition:.2s;white-space:nowrap}.toast.show{opacity:1}
+.empty{text-align:center;color:var(--muted);padding:24px}
+@media(orientation:landscape) and (max-height:650px){.sheet{left:auto;width:42%;height:100%!important;border-radius:0}.context{left:55%}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div class="top-strip" id="topStrip"><div class="pull-tab"></div></div>
+  <div class="top-menu" id="topMenu"><h3>Travel Companion · Budapest</h3><div class="menu-grid"><button class="menu-item" id="allPlaces">📍 Összes hely</button><button class="menu-item" id="todayView">📅 Tesztútiterv</button><button class="menu-item" id="fitAll">🗺 Teljes Budapest</button><button class="menu-item" id="resetPanel">↧ Panel alaphelyzet</button></div></div>
+  <div class="status">🇭🇺 Budapest · Alpha v0.2</div>
+  <button class="locate" id="locate">◎</button>
+
+  <section class="sheet" id="sheet">
+    <div class="handle-zone" id="handle"><div class="handle"></div></div>
+    <div class="sheet-head" id="sheetHead"><div class="main"><h2 id="title">Budapest tesztútiterv</h2><p id="sub">3 laza nap · 24 hely</p></div></div>
+    <div class="sheet-content" id="content"></div>
+  </section>
+
+  <button class="context" id="context">🇭🇺</button>
+  <div class="context-menu" id="contextMenu"><button class="ca" id="showPlan">📅 Tesztútiterv</button><button class="ca" id="showNearby">◉ Körülöttem</button><button class="ca" id="showFood">🍴 Éttermek és bárok</button><button class="ca" id="collapse">↧ Panel vissza</button></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const PLACES=[{"id": "buda_castle", "name": "Budai Várnegyed", "cat": "Látnivaló", "lat": 47.4961, "lon": 19.0396, "duration": 90, "day": 1, "order": 1, "desc": "Palotanegyed, történelmi utcák és panoráma a Dunára.", "worth": "Kihagyhatatlan első budapesti látogatásnál.", "price": "Kültér ingyenes"}, {"id": "fisherman", "name": "Halászbástya", "cat": "Látnivaló", "lat": 47.502, "lon": 19.0348, "duration": 45, "day": 1, "order": 2, "desc": "Neoromán teraszok és az egyik legismertebb pesti panoráma.", "worth": "Korán reggel vagy naplemente előtt a legjobb.", "price": "Alsó részek ingyenesek"}, {"id": "matthias", "name": "Mátyás-templom", "cat": "Épület", "lat": 47.5019, "lon": 19.0342, "duration": 40, "day": 1, "order": 3, "desc": "Díszes tető, gótikus tér és királyi koronázások helyszíne.", "worth": "Építészet és történelem miatt megéri bemenni.", "price": "Belépős"}, {"id": "chain_bridge", "name": "Széchenyi lánchíd", "cat": "Látnivaló", "lat": 47.4989, "lon": 19.0437, "duration": 25, "day": 1, "order": 4, "desc": "Budapest ikonikus dunai átkelője, gyalogosan is látványos.", "worth": "A budai és pesti oldal összekötéséhez ideális.", "price": "Ingyenes"}, {"id": "parliament", "name": "Országház", "cat": "Épület", "lat": 47.5071, "lon": 19.0457, "duration": 55, "day": 1, "order": 5, "desc": "Monumentális neogótikus parlamentépület a Duna partján.", "worth": "Kívülről mindenképp, belül előfoglalással.", "price": "Kültér ingyenes"}, {"id": "shoes", "name": "Cipők a Duna-parton", "cat": "Emlékhely", "lat": 47.5039, "lon": 19.0448, "duration": 20, "day": 1, "order": 6, "desc": "Megrázó holokauszt-emlékmű közvetlenül a folyóparton.", "worth": "Rövid, de fontos megálló.", "price": "Ingyenes"}, {"id": "st_stephen", "name": "Szent István-bazilika", "cat": "Épület", "lat": 47.5009, "lon": 19.0539, "duration": 55, "day": 1, "order": 7, "desc": "Kupolás bazilika, belső tér és látogatható panorámaterasz.", "worth": "A terasz különösen jó városi nézőpont.", "price": "Belépős"}, {"id": "gerbeaud", "name": "Gerbeaud Kávéház", "cat": "Kávézó", "lat": 47.4967, "lon": 19.0502, "duration": 45, "day": 1, "order": 8, "desc": "Történelmi kávéház klasszikus belvárosi környezetben.", "worth": "Hangulatért jó, de nem olcsó.", "price": "Közép–drága"}, {"id": "heroes", "name": "Hősök tere", "cat": "Látnivaló", "lat": 47.5149, "lon": 19.0779, "duration": 35, "day": 2, "order": 1, "desc": "Millenniumi emlékmű és monumentális városi tér.", "worth": "A Városligettel együtt érdemes bejárni.", "price": "Ingyenes"}, {"id": "vajdahunyad", "name": "Vajdahunyad vára", "cat": "Épület", "lat": 47.5152, "lon": 19.0824, "duration": 45, "day": 2, "order": 2, "desc": "Romantikus épületegyüttes több történelmi stílus keverékével.", "worth": "Kívülről látványos és fotózható.", "price": "Kültér ingyenes"}, {"id": "szechenyi", "name": "Széchenyi Gyógyfürdő", "cat": "Program", "lat": 47.5187, "lon": 19.0823, "duration": 150, "day": 2, "order": 3, "desc": "Budapest egyik legismertebb történelmi termálfürdője.", "worth": "Fél napos programként érdemes kezelni.", "price": "Belépős"}, {"id": "house_music", "name": "Magyar Zene Háza", "cat": "Építészet", "lat": 47.5144, "lon": 19.0873, "duration": 60, "day": 2, "order": 4, "desc": "Kortárs épület különleges tetővel és zenei kiállításokkal.", "worth": "Építészetkedvelőknek kiemelten ajánlott.", "price": "Kültér ingyenes"}, {"id": "andrassy", "name": "Andrássy út", "cat": "Séta", "lat": 47.5075, "lon": 19.0675, "duration": 45, "day": 2, "order": 5, "desc": "Sugárút palotákkal, üzletekkel és történelmi városképpel.", "worth": "A Hősök tere és a belváros között jó gyalogos tengely.", "price": "Ingyenes"}, {"id": "opera", "name": "Magyar Állami Operaház", "cat": "Épület", "lat": 47.5022, "lon": 19.0589, "duration": 45, "day": 2, "order": 6, "desc": "Gazdagon díszített neoreneszánsz operaház.", "worth": "Kívülről és vezetett túrával is erős program.", "price": "Túra belépős"}, {"id": "szimpla", "name": "Szimpla Kert", "cat": "Bár", "lat": 47.4969, "lon": 19.0632, "duration": 75, "day": 2, "order": 7, "desc": "Budapest legismertebb romkocsmája eklektikus belső terekkel.", "worth": "Turistás, de egyszer érdemes megnézni.", "price": "Közepes"}, {"id": "karavan", "name": "Street Food Karaván", "cat": "Étel", "lat": 47.4965, "lon": 19.0635, "duration": 50, "day": 2, "order": 8, "desc": "Könnyen kombinálható street food udvar a bulinegyedben.", "worth": "Gyors, laza vacsorához jó.", "price": "Közepes"}, {"id": "great_market", "name": "Nagycsarnok", "cat": "Piac", "lat": 47.4871, "lon": 19.0587, "duration": 55, "day": 3, "order": 1, "desc": "Történelmi fedett piac élelmiszerekkel és szuvenírekkel.", "worth": "Délelőtt élénkebb és érdekesebb.", "price": "Ingyenes belépés"}, {"id": "liberty_bridge", "name": "Szabadság híd", "cat": "Látnivaló", "lat": 47.4866, "lon": 19.0554, "duration": 20, "day": 3, "order": 2, "desc": "Zöld acélhíd szecessziós részletekkel és jó rakparti nézetekkel.", "worth": "A Nagycsarnok és a Gellért-hegy között útba esik.", "price": "Ingyenes"}, {"id": "gellert", "name": "Gellért-hegy és Citadella környéke", "cat": "Kilátó", "lat": 47.4869, "lon": 19.0464, "duration": 100, "day": 3, "order": 3, "desc": "Dunai panoráma és városi túra meredekebb emelkedővel.", "worth": "Jó időben az egyik legerősebb panoráma.", "price": "Kültér ingyenes"}, {"id": "bartok", "name": "Bartók Béla Boulevard", "cat": "Negyed", "lat": 47.4798, "lon": 19.0527, "duration": 60, "day": 3, "order": 4, "desc": "Kávézók, galériák és helyi hangulat a XI. kerületben.", "worth": "Kevésbé turistás, lazább budapesti élmény.", "price": "Ingyenes séta"}, {"id": "new_york", "name": "New York Café", "cat": "Kávézó", "lat": 47.4987, "lon": 19.0707, "duration": 55, "day": 3, "order": 5, "desc": "Látványos történelmi enteriőr, gyakran hosszú sorral.", "worth": "A belső tér miatt érdekes, de drága és zsúfolt lehet.", "price": "Drága"}, {"id": "dohany", "name": "Dohány utcai zsinagóga", "cat": "Épület", "lat": 47.4959, "lon": 19.0606, "duration": 70, "day": 3, "order": 6, "desc": "Európa egyik legnagyobb zsinagógája és fontos emlékhely.", "worth": "Történelmi tartalma miatt erős program.", "price": "Belépős"}, {"id": "wc_varosliget", "name": "Nyilvános WC – Városliget", "cat": "WC", "lat": 47.5142, "lon": 19.0838, "duration": 5, "day": 2, "order": 9, "desc": "Teszt utility marker a Radar és navigáció kipróbálásához.", "worth": "Hasznos tesztpont.", "price": "Változó"}, {"id": "wc_belvaros", "name": "Nyilvános WC – belváros", "cat": "WC", "lat": 47.4978, "lon": 19.0548, "duration": 5, "day": 1, "order": 9, "desc": "Teszt utility marker a Radar és navigáció kipróbálásához.", "worth": "Hasznos tesztpont.", "price": "Változó"}];
+const map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([47.4979,19.0552],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+L.control.zoom({position:'bottomright'}).addTo(map);
+
+const markers=new Map();
+function iconFor(p){
+  let cls=''; if(p.cat==='WC')cls='wc'; else if(['Étel','Kávézó'].includes(p.cat))cls='food'; else if(p.cat==='Bár')cls='bar';
+  return L.divIcon({className:'',html:`<div class="tc-marker ${cls}"><span>${p.cat==='WC'?'WC':p.order}</span></div>`,iconSize:[34,34],iconAnchor:[17,34]});
+}
+PLACES.forEach(p=>{
+  const m=L.marker([p.lat,p.lon],{icon:iconFor(p)}).addTo(map);
+  m.on('click',()=>selectPlace(p.id));
+  markers.set(p.id,m);
+});
+const dayColors={1:'#c8102e',2:'#4da3ff',3:'#45c56f'};
+const routeLayers=[];
+for(const day of [1,2,3]){
+  const pts=PLACES.filter(p=>p.day===day && p.cat!=='WC').sort((a,b)=>a.order-b.order).map(p=>[p.lat,p.lon]);
+  routeLayers.push(L.polyline(pts,{color:dayColors[day],weight:4,opacity:.75,dashArray:'10 8'}).addTo(map));
+}
+const group=L.featureGroup([...markers.values()]);
+const sheet=document.getElementById('sheet'),handle=document.getElementById('handle'),sheetHead=document.getElementById('sheetHead'),title=document.getElementById('title'),sub=document.getElementById('sub'),content=document.getElementById('content');
+const toastEl=document.getElementById('toast'),context=document.getElementById('context'),contextMenu=document.getElementById('contextMenu'),topStrip=document.getElementById('topStrip'),topMenu=document.getElementById('topMenu');
+
+const MINI=92, PEEK=156;
+let panelState='mini', selectedId=null, drag=null;
+function positions(){return {mini:MINI,peek:PEEK,half:Math.round(innerHeight*.52),full:Math.round(innerHeight*.91)}}
+function setPanel(state,animate=true){
+  panelState=state;sheet.classList.toggle('dragging',!animate);
+  sheet.style.transition=animate?'height .34s cubic-bezier(.22,.85,.22,1)':'none';
+  sheet.style.height=positions()[state]+'px';
+}
+function toast(t){toastEl.textContent=t;toastEl.classList.add('show');clearTimeout(toastEl.t);toastEl.t=setTimeout(()=>toastEl.classList.remove('show'),1400)}
+function get(id){return PLACES.find(p=>p.id===id)}
+function navUrl(p){return `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}&travelmode=walking`}
+function selectPlace(id){
+  selectedId=id;const p=get(id);
+  map.flyTo([p.lat,p.lon],Math.max(map.getZoom(),15),{duration:.45});
+  title.textContent=p.name;sub.textContent=`${p.cat} · ${p.duration} perc`;
+  content.innerHTML=detailHTML(p);
+  bindDetail(p);
+  setPanel('peek');
+}
+function detailHTML(p){
+  return `<div class="detail-grid"><div class="metric"><b>${p.duration} p</b>Idő</div><div class="metric"><b>${p.price}</b>Ár</div><div class="metric"><b>${p.day}. nap</b>Program</div></div>
+  <p class="description">${p.desc}</p><div class="card"><div class="card-main"><b>Megéri?</b><span>${p.worth}</span></div></div>
+  <div class="quick"><button class="chip" id="navigateBtn">↗ Navigáció</button><button class="chip" id="dayBtn">📅 ${p.day}. nap</button></div>`;
+}
+function bindDetail(p){
+  document.getElementById('navigateBtn').onclick=()=>window.open(navUrl(p),'_blank');
+  document.getElementById('dayBtn').onclick=()=>showDay(p.day);
+}
+function resetPanel(){
+  selectedId=null;title.textContent='Budapest tesztútiterv';sub.textContent='3 laza nap · 24 hely';renderPlan();setPanel('mini');
+}
+map.on('click',()=>{contextMenu.classList.remove('open');if(selectedId)resetPanel();else setPanel('mini')});
+
+function card(p){
+  return `<div class="card" data-id="${p.id}"><div class="thumb"></div><div class="card-main"><b>${p.order}. ${p.name}</b><span>${p.cat} · ${p.duration} perc</span></div><button class="icon-btn" data-nav="${p.id}">↗</button></div>`;
+}
+function renderPlan(){
+  content.innerHTML=`<div class="daytabs">${[1,2,3].map(d=>`<button data-day="${d}">${d}. nap</button>`).join('')}</div>`+[1,2,3].map(d=>`<h3>${d}. nap</h3>${PLACES.filter(p=>p.day===d&&p.cat!=='WC').sort((a,b)=>a.order-b.order).map(card).join('')}`).join('');
+  bindCards();
+}
+function showDay(day){
+  selectedId=null;const arr=PLACES.filter(p=>p.day===day&&p.cat!=='WC').sort((a,b)=>a.order-b.order);
+  title.textContent=`${day}. nap`;sub.textContent=`${arr.length} hely · laza budapesti program`;
+  content.innerHTML=`<div class="daytabs">${[1,2,3].map(d=>`<button class="${d===day?'active':''}" data-day="${d}">${d}. nap</button>`).join('')}</div>${arr.map(card).join('')}`;
+  bindCards();setPanel('half');
+  const fg=L.featureGroup(arr.map(p=>markers.get(p.id)));map.fitBounds(fg.getBounds(),{paddingTopLeft:[30,80],paddingBottomRight:[30,Math.round(innerHeight*.45)]});
+}
+function bindCards(){
+  document.querySelectorAll('[data-id]').forEach(c=>c.onclick=e=>{if(e.target.closest('[data-nav]'))return;selectPlace(c.dataset.id)});
+  document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=e=>{e.stopPropagation();const p=get(b.dataset.nav);window.open(navUrl(p),'_blank')});
+  document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>showDay(+b.dataset.day));
+}
+function showFiltered(fn,label){
+  const arr=PLACES.filter(fn);title.textContent=label;sub.textContent=`${arr.length} találat`;content.innerHTML=arr.map(card).join('')||'<div class="empty">Nincs találat.</div>';bindCards();setPanel('half');
+}
+
+function begin(e){if(e.target.closest('button'))return;drag={startY:e.clientY,startH:sheet.getBoundingClientRect().height,lastY:e.clientY};e.currentTarget.setPointerCapture?.(e.pointerId);sheet.classList.add('dragging')}
+function move(e){if(!drag)return;e.preventDefault();drag.lastY=e.clientY;const h=Math.max(MINI,Math.min(innerHeight*.94,drag.startH+(drag.startY-e.clientY)));sheet.style.height=h+'px'}
+function end(){
+  if(!drag)return;const dy=drag.startY-drag.lastY,h=sheet.getBoundingClientRect().height;drag=null;sheet.classList.remove('dragging');
+  const pos=positions();
+  if(dy<-32){setPanel('mini');return}
+  if(dy>32){
+    if(h<pos.half-30)setPanel('half'); else setPanel('full');
+    return;
+  }
+  const candidates=selectedId?['peek','half','full']:['mini','half','full'];
+  let best=candidates[0],dist=Infinity;candidates.forEach(s=>{const d=Math.abs(pos[s]-h);if(d<dist){dist=d;best=s}});
+  setPanel(best);
+}
+[handle,sheetHead].forEach(z=>{z.addEventListener('pointerdown',begin);z.addEventListener('pointermove',move,{passive:false});z.addEventListener('pointerup',end);z.addEventListener('pointercancel',end)});
+
+context.onclick=e=>{e.stopPropagation();contextMenu.classList.toggle('open')};
+topStrip.onclick=()=>topMenu.classList.toggle('open');
+document.addEventListener('pointerdown',e=>{if(!contextMenu.contains(e.target)&&e.target!==context)contextMenu.classList.remove('open');if(!topMenu.contains(e.target)&&!topStrip.contains(e.target))topMenu.classList.remove('open')});
+document.getElementById('showPlan').onclick=()=>{renderPlan();title.textContent='Budapest tesztútiterv';sub.textContent='3 laza nap · 24 hely';setPanel('half');contextMenu.classList.remove('open')};
+document.getElementById('showNearby').onclick=()=>{const c=map.getCenter();const arr=PLACES.map(p=>({...p,d:map.distance(c,[p.lat,p.lon])})).sort((a,b)=>a.d-b.d).slice(0,6);title.textContent='Körülöttem';sub.textContent='A térkép közepéhez legközelebbi helyek';content.innerHTML=arr.map(card).join('');bindCards();setPanel('half');contextMenu.classList.remove('open')};
+document.getElementById('showFood').onclick=()=>{showFiltered(p=>['Étel','Kávézó','Bár'].includes(p.cat),'Éttermek és bárok');contextMenu.classList.remove('open')};
+document.getElementById('collapse').onclick=()=>{resetPanel();contextMenu.classList.remove('open')};
+document.getElementById('allPlaces').onclick=()=>{showFiltered(()=>true,'Összes teszthely');topMenu.classList.remove('open')};
+document.getElementById('todayView').onclick=()=>{showDay(1);topMenu.classList.remove('open')};
+document.getElementById('fitAll').onclick=()=>{map.fitBounds(group.getBounds(),{padding:[35,80]});topMenu.classList.remove('open');resetPanel()};
+document.getElementById('resetPanel').onclick=()=>{resetPanel();topMenu.classList.remove('open')};
+document.getElementById('locate').onclick=()=>{map.locate({setView:true,maxZoom:16});toast('Helyzet meghatározása…')};
+map.on('locationfound',e=>{L.circleMarker(e.latlng,{radius:8,color:'#fff',weight:3,fillColor:'#4da3ff',fillOpacity:1}).addTo(map);toast('Aktuális hely megjelenítve')});
+map.on('locationerror',()=>toast('A helyzet nem érhető el'));
+window.addEventListener('resize',()=>setPanel(panelState,false));
+renderPlan();setPanel('mini',false);
+</script>
+</body>
+</html>
