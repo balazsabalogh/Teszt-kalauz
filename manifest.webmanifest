@@ -1,20 +1,8 @@
 {
-  "name": "Travel Companion Alpha 0.2 – Denmark",
+  "name": "Travel Companion Alpha",
   "short_name": "Travel Companion",
-  "start_url": "./",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#07111f",
-  "theme_color": "#c8102e",
-  "icons": [
-    {
-      "src": "assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "background_color": "#08111d",
+  "theme_color": "#08111d"
 }
