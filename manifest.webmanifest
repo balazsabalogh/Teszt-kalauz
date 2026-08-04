@@ -1,9 +1,0 @@
-{
-  "name": "Travel Companion Alpha v0.3",
-  "short_name": "TC Alpha",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#08111d",
-  "theme_color": "#08111d",
-  "description": "Budapest Map Experience alpha with custom markers, in-app navigation and version switcher."
-}
