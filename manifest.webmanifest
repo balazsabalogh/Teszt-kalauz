@@ -1,8 +1,9 @@
 {
-  "name": "Travel Companion Alpha",
-  "short_name": "Travel Companion",
+  "name": "Travel Companion Alpha Budapest",
+  "short_name": "TC Budapest",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#08111d",
-  "theme_color": "#08111d"
+  "theme_color": "#08111d",
+  "description": "Travel Companion Alpha v0.2 – Budapest tesztútiterv valós OSM térképpel."
 }
