@@ -1,10 +1,13 @@
 # Changelog
 
-## Alpha v0.3.1
-- Guide View
-- Map/Guide context-button switch
-- horizontal swipe view switch
-- bottom Companion insight strip
-- street-following day routes
-- infinite selected-marker float
-- removed top pull-down menu
+## Alpha v0.3.2
+- Reorderable day itinerary
+- Persistent bottom navigation
+- Contextual horizontal sheet gestures
+- Notification ticker and swipe actions
+- Expandable guide cards and facts
+- Visited-place state
+- Map focus controls
+- Filters and sonar demo
+- Custom point creation
+- Autosaved editing drafts
