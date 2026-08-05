@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#08111d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="css/app.css">
+<title>Travel Companion Alpha v0.3.1</title>
+</head>
+<body>
+<div id="app">
+  <div id="mapView" class="view-layer active"><div id="map"></div></div>
+
+  <section id="guideView" class="view-layer guide-view" aria-hidden="true">
+    <header class="guide-header">
+      <div><span class="eyebrow">🇭🇺 Budapest</span><h1>Budapest útikalauz</h1><p>3 laza nap · 24 hely · térképpel összekötve</p></div>
+      <button class="round-btn" id="guideVersions" aria-label="Verziók">⋯</button>
+    </header>
+    <div class="guide-hero">
+      <div class="hero-copy"><span class="hero-pill">ALPHA v0.3.1</span><h2>Budapest kényelmesen</h2><p>A legfontosabb klasszikus látnivalók, modern építészet, kávézók, bárok és hasznos megállók három napra rendezve.</p></div>
+    </div>
+    <div class="guide-switch"><button data-guide-day="1" class="active">1. nap</button><button data-guide-day="2">2. nap</button><button data-guide-day="3">3. nap</button></div>
+    <main id="guideContent" class="guide-content"></main>
+  </section>
+
+  <div class="status">🇭🇺 Budapest · Alpha v0.3.1</div>
+  <button class="locate" id="locate">◎</button>
+
+  <section class="sheet" id="sheet">
+    <button class="insight-strip" id="insightStrip"><span>✨ 3 Companion-javaslat</span><span>›</span></button>
+    <div class="handle-zone" id="handle"><div class="handle"></div></div>
+    <div class="sheet-head" id="sheetHead"><div class="main"><h2 id="title">Budapest tesztútiterv</h2><p id="sub">3 laza nap · 24 hely</p></div></div>
+    <div class="sheet-content" id="content"></div>
+  </section>
+
+  <button class="context" id="context" aria-label="Nézetváltás"><span class="context-symbol" id="contextSymbol">📖</span><span class="ai-badge" id="aiBadge">3</span></button>
+
+  <div class="nav-card" id="navCard"><div class="nav-arrow" id="navArrow">↑</div><div class="nav-copy"><b id="navTitle">Navigáció</b><span id="navMeta"></span></div><button id="stopNav">×</button></div>
+  <div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modal"></div></div>
+  <div class="toast" id="toast"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
