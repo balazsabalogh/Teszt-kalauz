@@ -260,3 +260,290 @@
 
 /* small screens */
 @media(max-width:390px){.map-filter-row button{padding:6px 9px}.city-pill{min-width:124px}.map-context-bar{gap:6px}}
+
+
+/* ============================================================
+   Alpha 0.5.1 — Visual Integration
+   Accepted map/home mock-up translated to the working prototype
+   ============================================================ */
+
+:root{
+  --mock-glass:rgba(10,16,23,.78);
+  --mock-glass-strong:rgba(8,14,21,.92);
+  --mock-border:rgba(255,255,255,.13);
+  --mock-shadow:0 12px 34px rgba(0,0,0,.30);
+}
+
+/* Dark map closer to the accepted mock-up. */
+#map{
+  filter:saturate(.66) brightness(.72) contrast(1.09) !important;
+}
+
+/* Top selectors: one compact visual line, safe below iPhone status area. */
+.map-context-bar{
+  top:calc(env(safe-area-inset-top) + 13px) !important;
+  left:14px !important;
+  right:14px !important;
+  gap:7px !important;
+}
+.glass-pill{
+  min-height:39px !important;
+  border-radius:15px !important;
+  border:1px solid var(--mock-border) !important;
+  background:var(--mock-glass) !important;
+  box-shadow:var(--mock-shadow) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+}
+.city-pill{flex:1;min-width:0 !important;}
+.day-pill-top{flex:0 0 42%;min-width:126px !important;}
+
+/* Quick filter row under city/day, like the approved mock-up. */
+.map-filter-row{
+  top:calc(env(safe-area-inset-top) + 62px) !important;
+  left:14px !important;
+  right:8px !important;
+  gap:6px !important;
+  padding-right:8px;
+}
+.map-filter-row button{
+  padding:7px 10px !important;
+  min-height:32px;
+  border-radius:999px !important;
+  font-size:10px !important;
+  background:rgba(8,14,21,.70) !important;
+  border:1px solid var(--mock-border) !important;
+  color:#d9e0e7 !important;
+  box-shadow:0 5px 14px rgba(0,0,0,.18);
+  backdrop-filter:blur(15px);
+}
+.map-filter-row button.active{
+  color:#111820 !important;
+  background:#f4f6f8 !important;
+  border-color:#f4f6f8 !important;
+}
+.map-filter-row .filter-more{
+  width:34px;
+  padding:0 !important;
+  display:grid;
+  place-items:center;
+}
+
+/* Right-side map actions: mock-up style circular glass buttons. */
+.map-tools{
+  top:auto !important;
+  bottom:calc(var(--sheet-h) + 20px) !important;
+  right:13px !important;
+}
+.map-tools button{
+  width:43px !important;
+  height:43px !important;
+  border-radius:50% !important;
+  color:white !important;
+  background:rgba(7,13,20,.82) !important;
+  border:1px solid var(--mock-border) !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.32) !important;
+}
+
+/* Hide the old top notification hub during this map-layout test.
+   Notifications are still accessible in the existing interaction code later. */
+.top-hub{display:none !important;}
+
+/* ---- Marker system v0.5.1 ----
+   top = category icon
+   center = route sequence number (large)
+   bottom = white needle
+   left arc graphite / right arc single category colour
+*/
+.tc-marker-v5{
+  width:50px !important;
+  height:65px !important;
+  --cat:#f06469;
+  filter:drop-shadow(0 9px 12px rgba(0,0,0,.44)) !important;
+}
+.marker-ring{
+  left:5px !important;
+  top:9px !important;
+  width:40px !important;
+  height:40px !important;
+  background:rgba(5,10,15,.84) !important;
+  border-radius:50% !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:visible !important;
+}
+.marker-ring::before{
+  inset:-1px !important;
+  background:
+    conic-gradient(
+      from 198deg,
+      transparent 0 7%,
+      #2f353b 8% 47%,
+      transparent 48% 54%,
+      var(--cat) 55% 94%,
+      transparent 95% 100%
+    ) !important;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px)) !important;
+  mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px)) !important;
+}
+
+/* big route number in the transparent centre */
+.marker-icon{
+  position:relative !important;
+  z-index:3 !important;
+  font-size:17px !important;
+  font-weight:850 !important;
+  line-height:1 !important;
+  color:#fff !important;
+  text-shadow:0 2px 5px rgba(0,0,0,.9) !important;
+  filter:none !important;
+}
+
+/* category badge on top, replacing the old navigation arrow */
+.marker-type{
+  position:absolute;
+  z-index:5;
+  left:50%;
+  top:-2px;
+  transform:translate(-50%,-50%);
+  min-width:24px;
+  height:24px;
+  padding:0 5px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:rgba(7,12,18,.93);
+  border:1px solid rgba(255,255,255,.23);
+  font-size:11px;
+  font-weight:750;
+  box-shadow:0 5px 12px rgba(0,0,0,.35);
+}
+
+/* white downward pointer */
+.marker-tip{
+  top:47px !important;
+  border-left-width:9px !important;
+  border-right-width:9px !important;
+  border-top-width:15px !important;
+  border-top-color:#f7f8fa !important;
+}
+
+/* Bigger selected marker, but still calm and continuously floating. */
+.tc-marker-v5.selected .marker-ring{
+  transform:scale(1.10) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.32),0 0 20px color-mix(in srgb,var(--cat) 42%,transparent) !important;
+}
+.tc-marker-v5.selected{
+  animation:v051-float 1.7s ease-in-out infinite !important;
+}
+@keyframes v051-float{
+  0%,100%{transform:translateY(-2px)}
+  50%{transform:translateY(-7px)}
+}
+
+/* category colours: one solid colour only */
+.tc-marker-v5.sight,
+.tc-marker-v5.building,
+.tc-marker-v5.architecture,
+.tc-marker-v5.memorial{--cat:#f06469}
+.tc-marker-v5.view{--cat:#5fa9e8}
+.tc-marker-v5.cafe{--cat:#d6a06d}
+.tc-marker-v5.food{--cat:#f29a43}
+.tc-marker-v5.bar{--cat:#a77ae4}
+.tc-marker-v5.activity,
+.tc-marker-v5.walk,
+.tc-marker-v5.district{--cat:#69b986}
+.tc-marker-v5.market{--cat:#e2b34c}
+.tc-marker-v5.wc{--cat:#82a7cf}
+.tc-marker-v5.custom{--cat:#eef2f5}
+
+/* Bottom sheet = same glass language as the mock-up. */
+.sheet{
+  background:linear-gradient(180deg,rgba(13,21,31,.95),rgba(6,11,17,.985)) !important;
+  border-top:1px solid rgba(255,255,255,.11) !important;
+  box-shadow:0 -16px 44px rgba(0,0,0,.45) !important;
+}
+.sheet[data-panel="peek"]{
+  border-radius:22px 22px 0 0 !important;
+}
+.sheet[data-panel="peek"] .sheet-head{
+  padding-right:15px !important;
+}
+.sheet-head h2{font-weight:770 !important;}
+.sheet-head p{color:#a8b3bf !important;}
+.card,.fact,.metric,.worth-line{
+  background:rgba(20,31,44,.70) !important;
+  border-color:rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(16px) !important;
+}
+.handle{
+  width:48px !important;
+  height:4px !important;
+  background:rgba(255,255,255,.40) !important;
+}
+
+/* mini/peek should be clean; full navigation only in expanded states */
+.sheet[data-panel="mini"] .bottom-tabs,
+.sheet[data-panel="peek"] .bottom-tabs{display:none !important;}
+.sheet[data-panel="half"] .bottom-tabs,
+.sheet[data-panel="full"] .bottom-tabs{display:grid !important;}
+
+/* day dock sits as the deliberate bottom control, away from map clutter */
+.day-dock{
+  border-radius:17px !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.38) !important;
+  backdrop-filter:blur(18px) saturate(130%) !important;
+}
+
+/* Loading / startup feedback surface based on accepted feedback mock-up. */
+.startup-overlay{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  background:#080d13;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  transition:opacity .4s ease,visibility .4s ease;
+}
+.startup-overlay.done{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.startup-mark{
+  width:92px;height:92px;position:relative;
+}
+.startup-ring{
+  position:absolute;inset:8px;border-radius:50%;
+  background:conic-gradient(from 210deg,#2b3137 0 42%,transparent 43% 52%,#f06469 53% 72%,#f5f6f7 73% 80%,#69b986 81% 96%,transparent 97%);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));
+  animation:start-ring 1.8s linear infinite;
+}
+.startup-arrow{
+  position:absolute;left:50%;top:1px;transform:translateX(-50%);
+  width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:0;border-top:20px solid #fff;
+}
+.startup-overlay b{font-size:19px;letter-spacing:.01em}
+.startup-overlay small{font-size:11px;color:#8e9aa6}
+.startup-progress{
+  width:min(54vw,210px);height:4px;background:#1b2631;border-radius:99px;overflow:hidden;
+}
+.startup-progress i{
+  display:block;width:12%;height:100%;border-radius:inherit;
+  background:linear-gradient(90deg,#f06469,#f5f6f7,#69b986);
+  transition:width .22s ease;
+}
+@keyframes start-ring{to{transform:rotate(360deg)}}
+
+/* Phone-safe layout. */
+@media(max-width:430px){
+  .map-context-bar{left:11px !important;right:11px !important}
+  .map-filter-row{left:11px !important}
+  .city-pill b,.day-pill-top b{font-size:11px !important}
+  .map-filter-row button{font-size:9px !important;padding:7px 9px !important}
+}
