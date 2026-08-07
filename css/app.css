@@ -203,3 +203,60 @@
   .top-ticker{height:calc(env(safe-area-inset-top) + 38px);}
   .day-dock{width:100%!important;}
 }
+
+
+/* === Alpha 0.5.0 Visual Refresh === */
+:root{
+  --v5-bg:#0b1017;--v5-glass:rgba(13,20,29,.76);--v5-border:rgba(255,255,255,.13);
+  --v5-graphite:#252b31;--v5-graphite-hi:#d8dde1;--v5-white:#f4f6f8;
+}
+#map{filter:saturate(.72) brightness(.78) contrast(1.06)}
+.leaflet-control-attribution{opacity:.55}
+
+/* brand mark: one open ring, softly whitening toward the top; country lives only on the right arc */
+.brand-mark{position:relative;width:42px;height:42px;display:block;border-radius:50%;}
+.brand-mark::before,.brand-mark::after{content:"";position:absolute;inset:2px;border-radius:50%;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));}
+.brand-mark::before{background:conic-gradient(from 205deg,transparent 0 9%,#252a2f 10%,#343a40 37%,#d9dde0 49%,transparent 50% 100%)}
+.brand-mark::after{background:conic-gradient(from -25deg,#d33d48 0 14%,#f5f5f3 14% 26%,#3b9b67 26% 41%,transparent 42% 100%)}
+.brand-dot{position:absolute;left:50%;top:1px;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #0b1017}
+.top-logo{background:rgba(7,11,16,.92)!important;border-color:rgba(255,255,255,.14)!important}
+.top-logo .brand-mark{transform:scale(.86)}
+
+/* notification strip: subtle glass, logo overlaps its center */
+.top-ticker{background:rgba(10,16,23,.80)!important;border-bottom:1px solid rgba(255,255,255,.10)!important;color:#dce2e8!important;backdrop-filter:blur(22px) saturate(130%)!important}
+.top-ticker .ticker-window{opacity:.86}
+
+/* map context controls inspired by the accepted mock-up */
+.map-context-bar{position:absolute;z-index:905;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 55px);display:flex;gap:8px;pointer-events:none}
+.glass-pill{pointer-events:auto;border:1px solid var(--v5-border);background:var(--v5-glass);color:#fff;border-radius:16px;min-height:42px;padding:8px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.20);backdrop-filter:blur(18px) saturate(140%)}
+.city-pill{min-width:136px}.city-pill b{font-size:13px}.city-pill small{margin-left:auto;color:#94a0ac}
+.day-pill-top{flex-direction:column;align-items:flex-start;gap:0;padding:6px 11px}.day-pill-top b{font-size:12px}.day-pill-top small{font-size:9px;color:#9ca8b5;max-width:132px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-filter-row{position:absolute;z-index:904;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 105px);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.map-filter-row::-webkit-scrollbar{display:none}
+.map-filter-row button{flex:0 0 auto;border:1px solid var(--v5-border);background:rgba(11,18,26,.72);color:#b9c3cd;border-radius:999px;padding:7px 11px;font-size:10px;backdrop-filter:blur(16px)}
+.map-filter-row button.active{background:#f4f6f8;color:#111820;border-color:#f4f6f8}
+.map-tools{top:calc(env(safe-area-inset-top) + 148px)!important}.map-tools button{background:rgba(11,18,26,.78)!important;border-color:var(--v5-border)!important;border-radius:50%!important;width:42px!important;height:42px!important;backdrop-filter:blur(16px)}
+
+/* marker family: no top point, closer arcs, one category color on the right, white downward needle */
+.tc-marker-v5{position:relative;width:42px;height:54px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.40));--cat:#e48a34}
+.marker-ring{position:absolute;left:3px;top:2px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#0a0f15}
+.marker-ring::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 200deg,transparent 0 8%,#373d43 9% 47%,transparent 48% 54%,var(--cat) 55% 93%,transparent 94% 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))}
+.marker-icon{position:relative;z-index:2;color:#f5f6f7;font-size:14px;font-weight:700;line-height:1}
+.marker-tip{position:absolute;left:50%;top:37px;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:13px solid #f5f6f7;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
+.tc-marker-v5.selected{animation:v5-marker-float 1.6s ease-in-out infinite}.tc-marker-v5.selected .marker-ring{transform:scale(1.12);box-shadow:0 0 0 1px rgba(255,255,255,.28)}
+@keyframes v5-marker-float{0%,100%{transform:translateY(-2px)}50%{transform:translateY(-7px)}}
+.tc-marker-v5.sight,.tc-marker-v5.building,.tc-marker-v5.architecture,.tc-marker-v5.memorial{--cat:#e85a5f}
+.tc-marker-v5.view{--cat:#4f9bdc}.tc-marker-v5.cafe{--cat:#d89b56}.tc-marker-v5.food{--cat:#e87f3d}.tc-marker-v5.bar{--cat:#9b72d0}
+.tc-marker-v5.activity,.tc-marker-v5.walk,.tc-marker-v5.district{--cat:#5ba87b}.tc-marker-v5.market{--cat:#d4a33e}.tc-marker-v5.wc{--cat:#8997a6}.tc-marker-v5.custom{--cat:#f0c34f}
+
+/* panels now use softer glass surfaces */
+.sheet{background:linear-gradient(180deg,rgba(17,27,39,.94),rgba(8,14,22,.97))!important;border-color:rgba(255,255,255,.10)!important;box-shadow:0 -16px 42px rgba(0,0,0,.42)!important}
+.card,.fact,.metric,.worth-line{background:rgba(25,39,55,.70)!important;border-color:rgba(255,255,255,.09)!important;backdrop-filter:blur(14px)}
+.bottom-tabs{background:rgba(8,14,22,.92)!important;border-color:rgba(255,255,255,.09)!important}.bottom-tabs button.active span{color:#fff!important}
+.day-dock{background:rgba(8,14,22,.95)!important;border-color:rgba(255,255,255,.10)!important}
+.day-current{background:rgba(25,39,55,.72)!important}.day-arrow{background:rgba(25,39,55,.62)!important}
+
+/* guide view follows same glass language */
+.guide-view{background:#0b1017!important}.guide-header,.guide-tabs,.guide-card,.guide-day-summary{border-color:rgba(255,255,255,.10)!important}.guide-card{background:rgba(18,28,40,.82)!important}
+
+/* small screens */
+@media(max-width:390px){.map-filter-row button{padding:6px 9px}.city-pill{min-width:124px}.map-context-bar{gap:6px}}
