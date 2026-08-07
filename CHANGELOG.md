@@ -1,11 +1,12 @@
 # Changelog
 
-## Alpha 0.4.1.a – Bottom Sheet Rebuild
-- Új Mini / Peek / Half / Full panelmagasságok
-- Mini állapotban kizárólag a fogantyú látszik
-- Peek állapotban nincs alsó menüsor
-- Az alsó menüsor csak Half és Full állapotban jelenik meg
-- Lefelé húzás bármely állapotból Mini állapotba zár
-- Felfelé pöccintés mindig a következő előre meghatározott állapotba ugrik
-- Finomabb, egységesebb panelanimáció
-- Térképre koppintás továbbra is alaphelyzetbe zárja a panelt
+## Alpha 0.4.1.b – iPhone Safe Bottom
+- A panel húzása már csak a felső fogantyúról indul.
+- A panel elemelkedik az iPhone alsó rendszer-gesztus zónájától.
+- Mini állapotban egy vízszintesen lapozható napválasztó pill látszik.
+- Kijelölt hely Peek állapotban a napválasztó eltűnik.
+- Half/Full állapotban a napválasztó a menüsor fölött jelenik meg.
+- Az alsó menüsor csak Half/Full állapotban látszik.
+- A Companion ikon és értesítési ticker felülre költözött.
+- A térkép zoom +/- gombjai alapból el vannak rejtve.
+- A két térképes segédgomb feljebb került.

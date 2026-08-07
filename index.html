@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/app.css">
-<title>Travel Companion Alpha v0.4.1.a</title>
+<title>Travel Companion Alpha 0.4.1.b</title>
 </head>
 <body>
 <div id="app">
@@ -30,14 +30,21 @@
     <main id="guideContent" class="guide-content"></main>
   </section>
 
-  <div class="status">🇭🇺 Budapest · Alpha v0.4.1.a</div>
+  <div class="top-hub" id="topHub">
+    <button class="top-logo" id="context" aria-label="Companion értesítések"><span class="context-symbol">◉</span><span class="ai-badge" id="aiBadge">3</span></button>
+    <button class="top-ticker" id="ticker"><span class="ticker-window"><span id="tickerText">Eső várható 16:00 után — a Gellért-hegyet érdemes előrébb hozni</span></span></button>
+  </div>
 
-  <section class="sheet" id="sheet" data-panel="mini">
-    <button class="ticker" id="ticker"><span class="ticker-logo">◉</span><span class="ticker-window"><span id="tickerText">Eső várható 16:00 után — a Gellért-hegyet érdemes előrébb hozni</span></span></button>
+  <section class="sheet" id="sheet">
     <div class="swipe-hints" id="swipeHints"><span>← Útikönyv</span><span>Navigáció →</span></div>
     <div class="handle-zone" id="handle"><div class="handle"></div></div>
     <div class="sheet-head" id="sheetHead"><div class="main"><h2 id="title">Budapest tesztútiterv</h2><p id="sub">3 laza nap · 24 hely</p></div></div>
     <div class="sheet-content" id="content"></div>
+    <div class="day-dock" id="dayDock">
+      <button class="day-arrow" id="dayPrev" aria-label="Előző nap">‹</button>
+      <button class="day-current" id="dayCurrent"><b>1. nap</b><span>Budai panoráma · belváros</span></button>
+      <button class="day-arrow" id="dayNext" aria-label="Következő nap">›</button>
+    </div>
     <nav class="bottom-tabs" id="bottomTabs">
       <button data-tab="map" class="active"><span>⌖</span><small>Térkép</small></button>
       <button data-tab="plan"><span>☷</span><small>Útiterv</small></button>
@@ -47,7 +54,6 @@
     </nav>
   </section>
 
-  <button class="context" id="context" aria-label="Értesítések"><span class="context-symbol">◉</span><span class="ai-badge" id="aiBadge">3</span></button>
 
   <div class="notifications" id="notifications" aria-hidden="true">
     <div class="notifications-head"><div><b>Companion</b><span>3 új javaslat</span></div><button id="closeNotifications">×</button></div>
