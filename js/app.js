@@ -1,4 +1,8 @@
-const CAT_ICONS={sight:'✦',building:'▥',view:'⌃',cafe:'☕',food:'⌑',bar:'♪',activity:'●',architecture:'◇',walk:'↝',market:'▦',district:'○',memorial:'†',wc:'WC',custom:'+'};
+const CAT_ICONS={
+sight:'⌂',building:'▦',view:'⌃',cafe:'☕',food:'⋔',bar:'♪',
+activity:'✦',architecture:'◇',walk:'↝',market:'▣',district:'○',
+memorial:'†',wc:'WC',custom:'+'
+};
 const CAT_BADGES={sight:'L',building:'É',view:'K',cafe:'K',food:'E',bar:'B',activity:'P',architecture:'A',walk:'S',market:'M',district:'N',memorial:'E',wc:'W',custom:'+'};
 const $=s=>document.querySelector(s);
 const els={sheet:$('#sheet'),handle:$('#handle'),sheetHead:$('#sheetHead'),title:$('#title'),sub:$('#sub'),content:$('#content'),context:$('#context'),toast:$('#toast'),modalBackdrop:$('#modalBackdrop'),modal:$('#modal'),navCard:$('#navCard'),navTitle:$('#navTitle'),navMeta:$('#navMeta'),navArrow:$('#navArrow'),mapView:$('#mapView'),guideView:$('#guideView'),guideContent:$('#guideContent'),mapTools:$('#mapTools'),notifications:$('#notifications'),notificationList:$('#notificationList'),ticker:$('#ticker'),tickerText:$('#tickerText'),swipeHints:$('#swipeHints'),sonar:$('#sonar'),bottomTabs:$('#bottomTabs'),dayDock:$('#dayDock'),dayCurrent:$('#dayCurrent')};
@@ -21,7 +25,21 @@ function factsFor(p){return [
 `A tesztverzióban az információk offline is megmaradnak.`,
 `Források később: hivatalos oldal, Wikipédia és Travel Intelligence.`]}
 function routeStep(p){const arr=orderedDay(p.day).filter(x=>x.cat!=='wc');const i=arr.findIndex(x=>x.id===p.id);return i>=0?i+1:null}
-function markerIcon(p,sel=false){return L.divIcon({className:'',html:`<div class="tc-marker-v5 ${p.cat||'custom'} ${sel?'selected':''}"><div class="marker-ring"><span class="marker-icon">${CAT_ICONS[p.cat]||'•'}</span></div><span class="marker-tip"></span></div>`,iconSize:[42,54],iconAnchor:[21,54]})}
+function markerIcon(p,sel=false){
+  const step=routeStep(p);
+  const number=step??'';
+  const type=CAT_ICONS[p.cat]||'•';
+  return L.divIcon({
+    className:'',
+    html:`<div class="tc-marker-v5 ${p.cat||'custom'} ${sel?'selected':''}">
+      <span class="marker-type">${type}</span>
+      <div class="marker-ring"><span class="marker-icon">${number}</span></div>
+      <span class="marker-tip"></span>
+    </div>`,
+    iconSize:[50,65],
+    iconAnchor:[25,65]
+  })
+}
 function setPanel(name,animate=true){state.panel=name;document.documentElement.style.setProperty('--sheet-h',h(name)+'px');els.sheet.dataset.panel=name;els.sheet.style.transition=animate?'height .38s cubic-bezier(.22,.9,.24,1)':'none';els.sheet.style.height=h(name)+'px';updateDayDock()}
 function daySummary(day){return {1:'Budai panoráma · belváros',2:'Városliget · Andrássy út',3:'Pest déli része · Gellért'}[day]||'Aktuális nap'}
 function updateDayDock(){if(els.dayCurrent)els.dayCurrent.innerHTML=`<b>${state.activeDay}. nap</b><span>${daySummary(state.activeDay)}</span>`;const top=$('#topDayPicker');if(top)top.innerHTML=`<b>${state.activeDay}. nap</b><small>${daySummary(state.activeDay)}</small>`;const show=state.panel==='mini'||state.panel==='half'||state.panel==='full';if(els.dayDock)els.dayDock.style.display=show?'flex':'none'}
@@ -47,7 +65,7 @@ function applyFilters(){state.markers.forEach((m,id)=>{const p=get(id);visiblePl
 function showSettings(){els.modal.innerHTML=`<h2>Menü</h2><button class="version" id="homeBtn">⌂ Főmenü / új projekt</button><button class="version" id="versionsBtn">🧪 Verziók</button><button class="version" id="draftBtn">📝 Draftok ${state.draft?'(1)':'(0)'}</button><button class="chip" id="closeModal">Bezárás</button>`;els.modalBackdrop.classList.add('show');$('#closeModal').onclick=()=>els.modalBackdrop.classList.remove('show');$('#versionsBtn').onclick=showVersions;$('#draftBtn').onclick=showDrafts;$('#homeBtn').onclick=()=>confirmExit()}
 function confirmExit(){els.modal.innerHTML=`<h2>Visszalépsz a főmenübe?</h2><p>A jelenlegi változtatások automatikusan draftként megmaradtak.</p><button class="version" id="keepDraft">Draft megtartása</button><button class="version" id="discardDraft">Draft elvetése</button><button class="chip" id="cancelExit">Mégse</button>`;$('#keepDraft').onclick=()=>{els.modalBackdrop.classList.remove('show');toast('Draft megtartva — főmenü képernyő későbbi buildben')};$('#discardDraft').onclick=()=>{state.draft=null;persist();els.modalBackdrop.classList.remove('show');toast('Draft elvetve')};$('#cancelExit').onclick=()=>els.modalBackdrop.classList.remove('show')}
 function showDrafts(){els.modal.innerHTML=`<h2>Draftok</h2>${state.draft?`<div class="fact"><b>${state.draft.type==='reorder'?'Átrendezett útiterv':'Szerkesztés'}</b><br>${state.draft.day||''}. nap · automatikusan mentve</div><button class="version" id="deleteDraft">Draft törlése</button>`:'<p>Nincs mentett draft.</p>'}<button class="chip" id="backSettings">Vissza</button>`;$('#backSettings').onclick=showSettings;if(state.draft)$('#deleteDraft').onclick=()=>{state.draft=null;persist();showDrafts()}}
-function showVersions(){els.modal.innerHTML=`<h2>Alpha-verziók</h2><a class="version" href="versions/v0.1/index.html">Alpha v0.1</a><a class="version" href="versions/v0.2/index.html">Alpha v0.2 · Budapest</a><a class="version" href="versions/v0.3.1/index.html">Alpha v0.3.1 · Guide View</a><a class="version current" href="index.html">Alpha v0.5.0 · Visual Refresh</a><button class="chip" id="backSettings">Vissza</button>`;els.modalBackdrop.classList.add('show');$('#backSettings').onclick=showSettings}
+function showVersions(){els.modal.innerHTML=`<h2>Alpha-verziók</h2><a class="version" href="versions/v0.1/index.html">Alpha v0.1</a><a class="version" href="versions/v0.2/index.html">Alpha v0.2 · Budapest</a><a class="version" href="versions/v0.3.1/index.html">Alpha v0.3.1 · Guide View</a><a class="version current" href="index.html">Alpha v0.5.1 · Visual Refresh</a><button class="chip" id="backSettings">Vissza</button>`;els.modalBackdrop.classList.add('show');$('#backSettings').onclick=showSettings}
 function renderNotifications(){els.notificationList.innerHTML=state.notifications.map(n=>`<div class="notification-card" data-note="${n.id}"><div class="notification-actions"><span>Elvetés</span><span>Hozzáadás</span></div><div class="notification-body"><b>${n.title}</b><span>${n.text}</span></div></div>`).join('');document.querySelectorAll('.notification-card').forEach(bindNotificationSwipe);$('#aiBadge').textContent=state.notifications.length;$('#aiBadge').style.display=state.notifications.length?'grid':'none'}
 function bindNotificationSwipe(card){const body=card.querySelector('.notification-body');let start=null,last=0;card.onpointerdown=e=>{start=e.clientX;last=e.clientX;card.setPointerCapture?.(e.pointerId)};card.onpointermove=e=>{if(start===null)return;last=e.clientX;body.style.transform=`translateX(${Math.max(-105,Math.min(105,last-start))}px)`};card.onpointerup=()=>{if(start===null)return;const dx=last-start,id=card.dataset.note,n=state.notifications.find(x=>x.id===id);if(dx<-65){state.notifications=state.notifications.filter(x=>x.id!==id);toast('Értesítés törölve');renderNotifications()}else if(dx>65){showNotificationAction(n);body.style.transform=''}else body.style.transform='';start=null};card.onclick=e=>{if(Math.abs(last-(start||last))<8){const n=state.notifications.find(x=>x.id===card.dataset.note);if(n?.placeId){closeNotifications();selectPlace(n.placeId,{fly:true})}}}}
 function showNotificationAction(n){els.modal.innerHTML=`<h2>${n.title}</h2><p>Hová kerüljön?</p><button class="version" id="nextPoint">Legyen a következő pont</button><button class="version" id="listEnd">Menjen a lista végére</button><button class="version" id="manualInsert">Kézi elhelyezés</button><button class="chip" id="cancelNote">Mégse</button>`;els.modalBackdrop.classList.add('show');$('#cancelNote').onclick=()=>els.modalBackdrop.classList.remove('show');$('#nextPoint').onclick=()=>quickInsert(n.placeId,'next');$('#listEnd').onclick=()=>quickInsert(n.placeId,'end');$('#manualInsert').onclick=()=>{els.modalBackdrop.classList.remove('show');closeNotifications();showDay(get(n.placeId).day);toast('Húzd a kívánt helyre, majd a sorrend automatikusan mentődik')}}
@@ -70,9 +88,46 @@ $('#dayNext').onclick=()=>shiftDay(1);
 $('#dayCurrent').onclick=()=>showDay(state.activeDay);
 const topDay=$('#topDayPicker');if(topDay)topDay.onclick=()=>shiftDay(1);
 const cityPicker=$('#cityPicker');if(cityPicker)cityPicker.onclick=()=>toast('Városválasztó – következő sprintben több várossal');
-document.querySelectorAll('[data-quick-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-quick-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.quickFilter;if(f==='all'){state.filters.utilities=true;state.filters.food=true;applyFilters();toast('Minden réteg látható')}else if(f==='food'){state.filters.food=true;applyFilters();toast('Étkezési helyek kiemelve')}else if(f==='cafe'){toast('Kávézók gyorsszűrő')}else if(f==='sight'){toast('Látnivalók gyorsszűrő')}else showFilters()});
+document.querySelectorAll('[data-quick-filter]').forEach(b=>b.onclick=()=>{
+  const f=b.dataset.quickFilter;
+  if(f==='more'){showFilters();return}
+  const was=b.classList.contains('active');
+  document.querySelectorAll('[data-quick-filter]').forEach(x=>x.classList.remove('active'));
+  if(!was)b.classList.add('active');
+  // This sprint keeps the existing data/filter engine intact; category chips
+  // are visual quick filters and highlight the relevant markers.
+  state.markers.forEach((m,id)=>{
+    const p=get(id);
+    const group = f==='sight'
+      ? ['sight','building','architecture','memorial','view'].includes(p.cat)
+      : f==='food' ? p.cat==='food'
+      : f==='cafe' ? p.cat==='cafe'
+      : f==='bar' ? p.cat==='bar'
+      : f==='market' ? p.cat==='market'
+      : true;
+    const el=m.getElement();
+    if(el) el.style.opacity = (!was && !group) ? '.26' : '1';
+  });
+  toast(was?'Gyorsszűrő kikapcsolva':`${b.textContent.trim()} kiemelve`);
+});
 let daySwipe=null;
 els.dayDock.addEventListener('pointerdown',e=>{if(e.target.closest('.day-arrow'))return;daySwipe={x:e.clientX,last:e.clientX};els.dayDock.setPointerCapture?.(e.pointerId)});
 els.dayDock.addEventListener('pointermove',e=>{if(daySwipe)daySwipe.last=e.clientX});
 els.dayDock.addEventListener('pointerup',()=>{if(!daySwipe)return;const dx=daySwipe.last-daySwipe.x;if(Math.abs(dx)>45)shiftDay(dx<0?1:-1);daySwipe=null});
-els.modalBackdrop.onclick=e=>{if(e.target===els.modalBackdrop)els.modalBackdrop.classList.remove('show')};window.addEventListener('resize',()=>setPanel(state.panel,false));init();
+els.modalBackdrop.onclick=e=>{if(e.target===els.modalBackdrop)els.modalBackdrop.classList.remove('show')};window.addEventListener('resize',()=>setPanel(state.panel,false));
+// Alpha 0.5.1 startup feedback demo
+const startupOverlay=document.querySelector('#startupOverlay');
+const startupProgress=document.querySelector('#startupProgress');
+if(startupOverlay&&startupProgress){
+  let pct=12;
+  const timer=setInterval(()=>{
+    pct=Math.min(100,pct+Math.floor(Math.random()*19)+8);
+    startupProgress.style.width=pct+'%';
+    if(pct>=100){
+      clearInterval(timer);
+      setTimeout(()=>startupOverlay.classList.add('done'),260);
+    }
+  },150);
+}
+
+init();
