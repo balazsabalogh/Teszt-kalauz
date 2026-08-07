@@ -547,3 +547,163 @@
   .city-pill b,.day-pill-top b{font-size:11px !important}
   .map-filter-row button{font-size:9px !important;padding:7px 9px !important}
 }
+
+
+/* ============================================================
+   Alpha 0.5.2 — Mockup Match
+   Keep marker overall size; refine proportions and map hierarchy.
+   ============================================================ */
+
+/* Top controls closer to the accepted mock-up proportions. */
+.map-context-bar{
+  top:calc(env(safe-area-inset-top) + 12px) !important;
+  left:13px !important;
+  right:13px !important;
+  gap:8px !important;
+}
+.glass-pill{
+  min-height:38px !important;
+  padding:0 12px !important;
+  border-radius:14px !important;
+  background:rgba(9,15,22,.80) !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:0 7px 20px rgba(0,0,0,.24) !important;
+}
+.map-filter-row{
+  top:calc(env(safe-area-inset-top) + 58px) !important;
+  left:13px !important;
+  right:10px !important;
+  gap:5px !important;
+}
+.map-filter-row button{
+  min-height:30px !important;
+  padding:6px 9px !important;
+  background:rgba(8,14,21,.77) !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:none !important;
+}
+
+/* Marker size intentionally stays 50x65. */
+.tc-marker-v5{
+  width:50px !important;
+  height:65px !important;
+}
+
+/* Main ring: same overall footprint, thinner and cleaner like the mockup. */
+.marker-ring{
+  left:5px !important;
+  top:10px !important;
+  width:40px !important;
+  height:40px !important;
+  background:rgba(5,10,15,.78) !important;
+}
+.marker-ring::before{
+  inset:0 !important;
+  background:
+    conic-gradient(
+      from 198deg,
+      transparent 0 8%,
+      #30363c 9% 47%,
+      transparent 48% 55%,
+      var(--cat) 56% 93%,
+      transparent 94% 100%
+    ) !important;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px)) !important;
+  mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px)) !important;
+}
+
+/* Route number is the visual centre. */
+.marker-icon{
+  font-size:19px !important;
+  font-weight:900 !important;
+  letter-spacing:-.02em;
+  color:#fff !important;
+  text-shadow:0 2px 5px rgba(0,0,0,.95) !important;
+}
+
+/* Category badge nests into the ring opening instead of floating high above it. */
+.marker-type{
+  top:7px !important;
+  min-width:21px !important;
+  height:21px !important;
+  padding:0 4px !important;
+  font-size:10px !important;
+  border-radius:50% !important;
+  background:rgba(7,12,18,.96) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 4px 9px rgba(0,0,0,.28) !important;
+}
+
+/* White pointer keeps its current length but starts closer to the ring. */
+.marker-tip{
+  top:47px !important;
+  border-left-width:9px !important;
+  border-right-width:9px !important;
+  border-top-width:14px !important;
+}
+
+/* Selected marker stays the same size, only floats gently. */
+.tc-marker-v5.selected .marker-ring{
+  transform:none !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.28),0 0 15px color-mix(in srgb,var(--cat) 36%,transparent) !important;
+}
+.tc-marker-v5.selected{
+  animation:v052-float 1.8s ease-in-out infinite !important;
+}
+@keyframes v052-float{
+  0%,100%{transform:translateY(-1px)}
+  50%{transform:translateY(-6px)}
+}
+
+/* Planning routes should be diagrammatic and quiet. */
+.leaflet-overlay-pane svg path.tc-planning-route{
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* Map controls match the mock-up: compact, separated, translucent. */
+.map-tools{
+  right:13px !important;
+  gap:9px !important;
+}
+.map-tools button{
+  width:42px !important;
+  height:42px !important;
+  border-radius:50% !important;
+  font-size:18px !important;
+}
+
+/* Mini day dock = the bottom control and grab surface. */
+.sheet[data-panel="mini"]{
+  --sheet-h:86px;
+}
+.sheet[data-panel="mini"] .day-dock{
+  min-height:70px !important;
+  padding-top:15px !important;
+  background:rgba(8,16,25,.96) !important;
+}
+.sheet[data-panel="mini"] .day-dock::before{
+  top:7px !important;
+  width:46px !important;
+  height:4px !important;
+  background:rgba(185,198,213,.68) !important;
+}
+.day-current{
+  border-radius:14px !important;
+  background:rgba(19,36,54,.72) !important;
+  border:1px solid rgba(255,255,255,.06) !important;
+}
+
+/* Peek card closer to mock-up: clean info first, details only after expansion. */
+.sheet[data-panel="peek"]{
+  background:linear-gradient(180deg,rgba(10,18,28,.94),rgba(7,13,20,.985)) !important;
+}
+.sheet[data-panel="peek"] .sheet-content{
+  padding-top:3px !important;
+}
+
+/* Keep full controls hidden in mini/peek. */
+.sheet[data-panel="mini"] .bottom-tabs,
+.sheet[data-panel="peek"] .bottom-tabs{
+  display:none !important;
+}
