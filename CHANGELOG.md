@@ -1,13 +1,11 @@
 # Changelog
 
-## Alpha v0.3.2
-- Reorderable day itinerary
-- Persistent bottom navigation
-- Contextual horizontal sheet gestures
-- Notification ticker and swipe actions
-- Expandable guide cards and facts
-- Visited-place state
-- Map focus controls
-- Filters and sonar demo
-- Custom point creation
-- Autosaved editing drafts
+## Alpha 0.4.1.a – Bottom Sheet Rebuild
+- Új Mini / Peek / Half / Full panelmagasságok
+- Mini állapotban kizárólag a fogantyú látszik
+- Peek állapotban nincs alsó menüsor
+- Az alsó menüsor csak Half és Full állapotban jelenik meg
+- Lefelé húzás bármely állapotból Mini állapotba zár
+- Felfelé pöccintés mindig a következő előre meghatározott állapotba ugrik
+- Finomabb, egységesebb panelanimáció
+- Térképre koppintás továbbra is alaphelyzetbe zárja a panelt
