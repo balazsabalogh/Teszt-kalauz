@@ -1,28 +1,15 @@
 # Changelog
 
-## Alpha 0.5.1 — Visual Integration
+## Alpha 0.5.2 — Mockup Match
 
-### Visual
-- Főképernyő a jóváhagyott mockup vizuális hierarchiájához igazítva.
-- Budapest + aktuális nap glass selector felül.
-- Gyors kategóriaszűrők közvetlenül a térképen.
-- Sötétebb, visszafogottabb térképmegjelenés.
-- Egységes glass panel- és gombstílus.
-
-### Marker v0.5.1
-- Felül a hely típusa jelenik meg.
-- Középen jóval nagyobb útiterv-sorszám.
-- Szám nélküli pontnál a közép üres marad.
-- Bal ív grafit, jobb ív kategóriánként egyetlen szín.
-- Alul fehér térképtű.
-- Kijelölt marker folyamatos, finom lebegést kap.
-
-### Bottom Sheet
-- Peek állapot letisztítva.
-- Alsó navigáció csak Half / Full nézetben jelenik meg.
-- Safe-area kezelés megmaradt az iPhone alsó gesztuszónája miatt.
-
-### Feedback UI
-- Rövid indulási/loading felület került a buildbe.
-- Országszínes progress vizuális tesztként.
+- A marker teljes mérete változatlan maradt.
+- A kategóriajel közelebb került a marker felső nyílásához.
+- A sorszám nagyobb és hangsúlyosabb lett.
+- A grafit és kategóriaszínű ívek vékonyabb, mockup-szerű arányt kaptak.
+- A kijelölt marker nem nagyul meg, csak finoman lebeg.
+- Tervező módban az útvonal ismét közvetlen pont–pont vonal.
+- Utcakövető útvonal csak az alkalmazáson belüli navigációnál marad.
+- Az aktív nap útvonala erősebb, a többi nap halványabb.
+- A top bar, szűrősor és térképgombok finomítva a mockup arányaihoz.
+- A mini napválasztó továbbra is az alsó Bottom Sheet fogófelülete.
 

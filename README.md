@@ -1,13 +1,11 @@
-# Travel Companion Alpha 0.5.1 — Visual Integration
+# Travel Companion Alpha 0.5.2 — Mockup Match
 
-Ez a build elsősorban vizuális és UX-teszt.
+Ez a build a jóváhagyott főképernyő-mockuphoz igazítja a működő térképes prototípust.
 
-## Ezt teszteld
-1. A térkép első pillantásra átláthatóbb-e.
-2. A marker felső kategóriaikon + nagy sorszám működik-e kis kijelzőn.
-3. A Budapest / nap selector és a gyorsszűrők jó helyen vannak-e.
-4. Markerre koppintás után a Peek panel mennyire kényelmes.
-5. Half / Full állapotban az alsó menü nem akad-e össze az iPhone rendszer-gesztusával.
-6. A glass UI túl sok / túl kevés / pont jó-e.
-
-A funkcionális motor nagy része a 0.5.0 buildből maradt, hogy a vizuális változásokat ugyanazon működés mellett lehessen összehasonlítani.
+## Elsősorban ezt teszteld
+- A markerek most jobban hasonlítanak-e a mockupra úgy, hogy a méretük nem változott.
+- A sorszám elég hangsúlyos-e.
+- A kategóriaikon integráltabbnak érződik-e.
+- A közvetlen pont–pont tervező útvonal átláthatóbb-e.
+- Az aktív nap és a többi nap útvonala jól elkülönül-e.
+- A Bottom Sheet / napválasztó iPhone-on kényelmesen húzható-e.
