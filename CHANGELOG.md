@@ -1,12 +1,9 @@
 # Changelog
 
-## Alpha 0.4.1.b – iPhone Safe Bottom
-- A panel húzása már csak a felső fogantyúról indul.
-- A panel elemelkedik az iPhone alsó rendszer-gesztus zónájától.
-- Mini állapotban egy vízszintesen lapozható napválasztó pill látszik.
-- Kijelölt hely Peek állapotban a napválasztó eltűnik.
-- Half/Full állapotban a napválasztó a menüsor fölött jelenik meg.
-- Az alsó menüsor csak Half/Full állapotban látszik.
-- A Companion ikon és értesítési ticker felülre költözött.
-- A térkép zoom +/- gombjai alapból el vannak rejtve.
-- A két térképes segédgomb feljebb került.
+## Alpha 0.4.1.c
+- alsó panel és napválasztó teljesen a képernyő aljára került
+- a napválasztó felső éle lett a Mini állapot fogópontja
+- külön lebegő alsó értesítési elem megszüntetve
+- felső értesítési sáv a képernyő felső síkjára került
+- egyetlen Companion-logó középen, enyhén a sávba lógva
+- map toolok lejjebb kerültek, hogy ne akadjanak a felső sávba
