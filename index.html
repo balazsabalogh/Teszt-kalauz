@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/app.css">
-<title>Travel Companion Alpha 0.4.1.b</title>
+<title>Travel Companion Alpha 0.5.0 – Visual Refresh</title>
 </head>
 <body>
 <div id="app">
@@ -25,14 +25,29 @@
       <div><span class="eyebrow">🇭🇺 Budapest</span><h1>Budapest útikönyv</h1><p>3 laza nap · 24 hely · ugyanaz az útiterv, részletesebb nézetben</p></div>
       <button class="round-btn" id="guideVersions" aria-label="Verziók">⋯</button>
     </header>
-    <div class="guide-hero"><div class="hero-copy"><span class="hero-pill">ALPHA v0.3.2</span><h2>Budapest kényelmesen</h2><p>Klasszikus látnivalók, építészet, kávézók, bárok és hasznos megállók három napra rendezve.</p></div></div>
+    <div class="guide-hero"><div class="hero-copy"><span class="hero-pill">ALPHA v0.5.0</span><h2>Budapest kényelmesen</h2><p>Klasszikus látnivalók, építészet, kávézók, bárok és hasznos megállók három napra rendezve.</p></div></div>
     <div class="guide-switch"><button data-guide-day="1" class="active">1. nap</button><button data-guide-day="2">2. nap</button><button data-guide-day="3">3. nap</button></div>
     <main id="guideContent" class="guide-content"></main>
   </section>
 
   <div class="top-hub" id="topHub">
-    <button class="top-logo" id="context" aria-label="Companion értesítések"><span class="context-symbol">◉</span><span class="ai-badge" id="aiBadge">3</span></button>
     <button class="top-ticker" id="ticker"><span class="ticker-window"><span id="tickerText">Eső várható 16:00 után — a Gellért-hegyet érdemes előrébb hozni</span></span></button>
+    <button class="top-logo" id="context" aria-label="Companion értesítések">
+      <span class="brand-mark country-hu" aria-hidden="true"><span class="brand-dot"></span></span>
+      <span class="ai-badge" id="aiBadge">3</span>
+    </button>
+  </div>
+
+  <div class="map-context-bar" id="mapContextBar">
+    <button class="glass-pill city-pill" id="cityPicker"><span>🇭🇺</span><b>Budapest</b><small>⌄</small></button>
+    <button class="glass-pill day-pill-top" id="topDayPicker"><b>1. nap</b><small>Budai panoráma</small></button>
+  </div>
+  <div class="map-filter-row" id="mapFilterRow">
+    <button data-quick-filter="all" class="active">Minden</button>
+    <button data-quick-filter="sight">Látnivalók</button>
+    <button data-quick-filter="food">Étkezés</button>
+    <button data-quick-filter="cafe">Kávé</button>
+    <button data-quick-filter="more">•••</button>
   </div>
 
   <section class="sheet" id="sheet">

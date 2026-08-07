@@ -1,9 +1,16 @@
 # Changelog
 
-## Alpha 0.4.1.c
-- alsó panel és napválasztó teljesen a képernyő aljára került
-- a napválasztó felső éle lett a Mini állapot fogópontja
-- külön lebegő alsó értesítési elem megszüntetve
-- felső értesítési sáv a képernyő felső síkjára került
-- egyetlen Companion-logó középen, enyhén a sávba lógva
-- map toolok lejjebb kerültek, hogy ne akadjanak a felső sávba
+## Alpha 0.5.0 — Visual Refresh
+- Új Travel Companion alaplogó: nyitott grafit ív, felfelé világosodó anyaghatás
+- Aktív ország a jobb íven zászlószínekkel
+- Új marker rendszer: nincs felső nyíl/pont, lefelé mutató fehér tű, kategória ikon középen
+- Kategóriánként egyetlen marker-szín
+- Áttetsző város- és napválasztó a térkép tetején
+- Gyors kategóriaszűrő sor
+- Egységesebb glass UI a panelen és kártyákon
+- Zoom gomb továbbra is rejtve
+
+## Nyitott kérdések
+- Térképes gyorsszűrők végleges sorrendje (WC helye különösen)
+- Splash/loading végleges animációja
+- Telefon iránytű integrációjának UX-e
