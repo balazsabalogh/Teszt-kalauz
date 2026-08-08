@@ -1,8 +1,4 @@
-const CAT_ICONS={
-sight:'🏛',building:'🏛',view:'⌃',cafe:'☕',food:'🍴',bar:'♢',
-activity:'★',architecture:'🏛',walk:'•',market:'▣',district:'•',
-memorial:'†',wc:'WC',custom:'+'
-};
+const CAT_ICONS={sight:'✦',building:'▥',view:'⌃',cafe:'☕',food:'⌑',bar:'♪',activity:'●',architecture:'◇',walk:'↝',market:'▦',district:'○',memorial:'†',wc:'WC',custom:'+'};
 const CAT_BADGES={sight:'L',building:'É',view:'K',cafe:'K',food:'E',bar:'B',activity:'P',architecture:'A',walk:'S',market:'M',district:'N',memorial:'E',wc:'W',custom:'+'};
 const $=s=>document.querySelector(s);
 const els={sheet:$('#sheet'),handle:$('#handle'),sheetHead:$('#sheetHead'),title:$('#title'),sub:$('#sub'),content:$('#content'),context:$('#context'),toast:$('#toast'),modalBackdrop:$('#modalBackdrop'),modal:$('#modal'),navCard:$('#navCard'),navTitle:$('#navTitle'),navMeta:$('#navMeta'),navArrow:$('#navArrow'),mapView:$('#mapView'),guideView:$('#guideView'),guideContent:$('#guideContent'),mapTools:$('#mapTools'),notifications:$('#notifications'),notificationList:$('#notificationList'),ticker:$('#ticker'),tickerText:$('#tickerText'),swipeHints:$('#swipeHints'),sonar:$('#sonar'),bottomTabs:$('#bottomTabs'),dayDock:$('#dayDock'),dayCurrent:$('#dayCurrent')};
@@ -25,31 +21,11 @@ function factsFor(p){return [
 `A tesztverzióban az információk offline is megmaradnak.`,
 `Források később: hivatalos oldal, Wikipédia és Travel Intelligence.`]}
 function routeStep(p){const arr=orderedDay(p.day).filter(x=>x.cat!=='wc');const i=arr.findIndex(x=>x.id===p.id);return i>=0?i+1:null}
-function markerIcon(p,sel=false){
-  const step=routeStep(p);
-  const number=step??'';
-  const type=CAT_ICONS[p.cat]||'•';
-  return L.divIcon({
-    className:'',
-    html:`<div class="tc-marker-v5 ${p.cat||'custom'} ${sel?'selected':''}">
-      <span class="marker-type">${type}</span>
-      <div class="marker-ring"><span class="marker-icon">${number}</span></div>
-      <span class="marker-tip"></span>
-    </div>`,
-    iconSize:[50,65],
-    iconAnchor:[25,65]
-  })
-}
+function markerIcon(p,sel=false){return L.divIcon({className:'',html:`<div class="tc-marker-v5 day-${p.day||state.activeDay} ${p.cat||'custom'} ${sel?'selected':''}"><div class="marker-ring"><span class="marker-icon">${CAT_ICONS[p.cat]||'•'}</span></div><span class="marker-tip"></span></div>`,iconSize:[42,54],iconAnchor:[21,54]})}
 function setPanel(name,animate=true){state.panel=name;document.documentElement.style.setProperty('--sheet-h',h(name)+'px');els.sheet.dataset.panel=name;els.sheet.style.transition=animate?'height .38s cubic-bezier(.22,.9,.24,1)':'none';els.sheet.style.height=h(name)+'px';updateDayDock()}
 function daySummary(day){return {1:'Budai panoráma · belváros',2:'Városliget · Andrássy út',3:'Pest déli része · Gellért'}[day]||'Aktuális nap'}
 function updateDayDock(){if(els.dayCurrent)els.dayCurrent.innerHTML=`<b>${state.activeDay}. nap</b><span>${daySummary(state.activeDay)}</span>`;const top=$('#topDayPicker');if(top)top.innerHTML=`<b>${state.activeDay}. nap</b><small>${daySummary(state.activeDay)}</small>`;const show=state.panel==='mini'||state.panel==='half'||state.panel==='full';if(els.dayDock)els.dayDock.style.display=show?'flex':'none'}
-function shiftDay(delta){
-  state.activeDay=((state.activeDay-1+delta+3)%3)+1;
-  persist();
-  updateDayDock();
-  [1,2,3].forEach(d=>buildDayRoute(d,true));
-  if(state.panel!=='mini')showDay(state.activeDay)
-}
+function shiftDay(delta){state.activeDay=((state.activeDay-1+delta+3)%3)+1;persist();updateDayDock();if(state.panel!=='mini')showDay(state.activeDay)}
 function updateMarkers(){state.markers.forEach((m,id)=>{const p=get(id);if(p)m.setIcon(markerIcon(p,id===state.selected))})}
 function orderedDay(day){const base=state.places.filter(p=>p.day===day);const order=state.dayOrder[day];if(!order)return base.sort((a,b)=>a.order-b.order);return [...base].sort((a,b)=>{const ai=order.indexOf(a.id),bi=order.indexOf(b.id);return (ai<0?999:ai)-(bi<0?999:bi)})}
 function visiblePlace(p){if(!state.filters.days.includes(p.day))return false;if(p.cat==='wc'&&!state.filters.utilities)return false;if(['food','cafe','bar'].includes(p.cat)&&!state.filters.food)return false;return true}
@@ -61,7 +37,7 @@ function resetPanel(){state.selected=null;updateMarkers();els.title.textContent=
 function card(p,{drag=true}={}){return `<div class="card ${state.visited.has(p.id)?'visited':''}" data-id="${p.id}">${drag?'<div class="drag-handle" data-drag="'+p.id+'"></div>':''}<div class="thumb"></div><div class="card-main"><b>${routeStep(p)||p.order}. ${p.name}</b><span>${p.label} · ${p.duration} perc</span></div><div class="card-actions"><button class="icon-btn visit-btn ${state.visited.has(p.id)?'done':''}" data-visit="${p.id}">${state.visited.has(p.id)?'✓':'○'}</button><button class="icon-btn" data-nav="${p.id}">➤</button></div></div>`}
 function bindCards(day=null){document.querySelectorAll('[data-id]').forEach(c=>c.onclick=e=>{if(!e.target.closest('button,.drag-handle'))selectPlace(c.dataset.id)});document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=e=>{e.stopPropagation();startNavigation(get(b.dataset.nav))});document.querySelectorAll('[data-visit]').forEach(b=>b.onclick=e=>{e.stopPropagation();toggleVisited(b.dataset.visit)});document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>showDay(+b.dataset.day));if(day)bindReorder(day)}
 function renderPlan(){els.content.innerHTML=`<div class="daytabs">${[1,2,3].map(d=>`<button data-day="${d}">${d}. nap</button>`).join('')}</div>`+[1,2,3].map(d=>`<h3>${d}. nap</h3>${orderedDay(d).filter(p=>p.cat!=='wc').map(p=>card(p,{drag:false})).join('')}`).join('');bindCards()}
-function showDay(day){state.activeDay=day;persist();[1,2,3].forEach(d=>buildDayRoute(d,true));state.selected=null;updateMarkers();const arr=orderedDay(day).filter(p=>p.cat!=='wc');els.title.textContent=`${day}. nap`;els.sub.textContent=`${arr.length} hely · húzd a fogópontnál`;els.content.innerHTML=`<div class="daytabs">${[1,2,3].map(d=>`<button class="${d===day?'active':''}" data-day="${d}">${d}. nap</button>`).join('')}</div><div id="reorderList">${arr.map(p=>card(p)).join('')}</div>`;bindCards(day);setPanel('half');activateTab('plan',false);const fg=L.featureGroup(arr.map(p=>state.markers.get(p.id)));map.fitBounds(fg.getBounds(),{paddingTopLeft:[30,90],paddingBottomRight:[30,Math.round(innerHeight*.46)]})}
+function showDay(day){state.activeDay=day;persist();state.selected=null;updateMarkers();const arr=orderedDay(day).filter(p=>p.cat!=='wc');els.title.textContent=`${day}. nap`;els.sub.textContent=`${arr.length} hely · húzd a fogópontnál`;els.content.innerHTML=`<div class="daytabs">${[1,2,3].map(d=>`<button class="${d===day?'active':''}" data-day="${d}">${d}. nap</button>`).join('')}</div><div id="reorderList">${arr.map(p=>card(p)).join('')}</div>`;bindCards(day);setPanel('half');activateTab('plan',false);const fg=L.featureGroup(arr.map(p=>state.markers.get(p.id)));map.fitBounds(fg.getBounds(),{paddingTopLeft:[30,90],paddingBottomRight:[30,Math.round(innerHeight*.46)]})}
 function bindReorder(day){let drag=null;document.querySelectorAll('.drag-handle').forEach(handle=>{handle.addEventListener('pointerdown',e=>{e.preventDefault();const card=handle.closest('.card');drag={card,startY:e.clientY,lastY:e.clientY};card.classList.add('dragging');handle.setPointerCapture?.(e.pointerId)});handle.addEventListener('pointermove',e=>{if(!drag)return;e.preventDefault();drag.lastY=e.clientY;const list=$('#reorderList');const cards=[...list.querySelectorAll('.card:not(.dragging)')];const after=cards.find(c=>e.clientY<c.getBoundingClientRect().top+c.offsetHeight/2);after?list.insertBefore(drag.card,after):list.appendChild(drag.card)});const end=()=>{if(!drag)return;drag.card.classList.remove('dragging');state.dayOrder[day]=[...$('#reorderList').querySelectorAll('.card')].map(c=>c.dataset.id);state.draft={type:'reorder',day,order:state.dayOrder[day],savedAt:Date.now()};persist();drag=null;updateMarkers();buildDayRoute(day,true);toast('Sorrend draftként mentve')};handle.addEventListener('pointerup',end);handle.addEventListener('pointercancel',end)})}
 function renderGuide(day=1,focusId=null){state.activeGuideDay=day;state.activeDay=day;persist();updateDayDock();document.querySelectorAll('[data-guide-day]').forEach(b=>b.classList.toggle('active',+b.dataset.guideDay===day));const arr=orderedDay(day).filter(p=>p.cat!=='wc');els.guideContent.innerHTML=`<h2>${day}. nap</h2>${arr.map(p=>`<article class="guide-place ${state.visited.has(p.id)?'visited':''}" id="guide-${p.id}"><div class="guide-num">${routeStep(p)}</div><div><h3>${p.name}</h3><p>${p.desc}</p><div class="guide-meta">${p.label} · ${p.duration} perc · ${p.price}</div><div class="guide-actions"><button data-expand="${p.id}">Bővebben</button><button data-map-place="${p.id}">Térképen</button><button data-guide-visit="${p.id}">${state.visited.has(p.id)?'✓ Megnézve':'○ Megnéztem'}</button></div><div class="guide-more">${factsFor(p).slice(0,4).map(f=>`<div class="fact">${f}</div>`).join('')}</div></div></article>`).join('')}<nav class="guide-bottom"><button data-g-tab="map"><span>⌖</span><small>Térkép</small></button><button class="active"><span>☷</span><small>Útikönyv</small></button><button data-g-tab="info"><span>i</span><small>Infók</small></button><button data-g-tab="filters"><span>≡</span><small>Szűrők</small></button><button data-g-tab="settings"><span>⚙</span><small>Menü</small></button></nav>`;document.querySelectorAll('[data-expand]').forEach(b=>b.onclick=()=>b.closest('.guide-place').classList.toggle('expanded'));document.querySelectorAll('[data-map-place]').forEach(b=>b.onclick=()=>{switchView('map');selectPlace(b.dataset.mapPlace,{fly:true})});document.querySelectorAll('[data-guide-visit]').forEach(b=>b.onclick=()=>toggleVisited(b.dataset.guideVisit));document.querySelectorAll('[data-g-tab]').forEach(b=>b.onclick=()=>{const t=b.dataset.gTab;if(t==='map')switchView('map');else if(t==='filters'){switchView('map');showFilters()}else if(t==='settings'){showSettings()}else if(t==='info'&&focusId){const el=$(`#guide-${focusId}`);el?.classList.add('expanded');el?.scrollIntoView({behavior:'smooth',block:'center'})}});if(focusId)setTimeout(()=>document.querySelector(`#guide-${focusId}`)?.scrollIntoView({behavior:'smooth',block:'center'}),120)}
 function switchView(view,day=state.activeGuideDay,focusId=null){state.view=view;const guide=view==='guide';els.mapView.classList.toggle('active',!guide);els.guideView.classList.toggle('active',guide);els.guideView.setAttribute('aria-hidden',String(!guide));els.sheet.classList.toggle('hidden',guide);els.context.classList.toggle('guide-mode',guide);els.mapTools.style.display=guide?'none':'grid';if(guide)renderGuide(day,focusId);else setTimeout(()=>map.invalidateSize(),300)}
@@ -71,7 +47,7 @@ function applyFilters(){state.markers.forEach((m,id)=>{const p=get(id);visiblePl
 function showSettings(){els.modal.innerHTML=`<h2>Menü</h2><button class="version" id="homeBtn">⌂ Főmenü / új projekt</button><button class="version" id="versionsBtn">🧪 Verziók</button><button class="version" id="draftBtn">📝 Draftok ${state.draft?'(1)':'(0)'}</button><button class="chip" id="closeModal">Bezárás</button>`;els.modalBackdrop.classList.add('show');$('#closeModal').onclick=()=>els.modalBackdrop.classList.remove('show');$('#versionsBtn').onclick=showVersions;$('#draftBtn').onclick=showDrafts;$('#homeBtn').onclick=()=>confirmExit()}
 function confirmExit(){els.modal.innerHTML=`<h2>Visszalépsz a főmenübe?</h2><p>A jelenlegi változtatások automatikusan draftként megmaradtak.</p><button class="version" id="keepDraft">Draft megtartása</button><button class="version" id="discardDraft">Draft elvetése</button><button class="chip" id="cancelExit">Mégse</button>`;$('#keepDraft').onclick=()=>{els.modalBackdrop.classList.remove('show');toast('Draft megtartva — főmenü képernyő későbbi buildben')};$('#discardDraft').onclick=()=>{state.draft=null;persist();els.modalBackdrop.classList.remove('show');toast('Draft elvetve')};$('#cancelExit').onclick=()=>els.modalBackdrop.classList.remove('show')}
 function showDrafts(){els.modal.innerHTML=`<h2>Draftok</h2>${state.draft?`<div class="fact"><b>${state.draft.type==='reorder'?'Átrendezett útiterv':'Szerkesztés'}</b><br>${state.draft.day||''}. nap · automatikusan mentve</div><button class="version" id="deleteDraft">Draft törlése</button>`:'<p>Nincs mentett draft.</p>'}<button class="chip" id="backSettings">Vissza</button>`;$('#backSettings').onclick=showSettings;if(state.draft)$('#deleteDraft').onclick=()=>{state.draft=null;persist();showDrafts()}}
-function showVersions(){els.modal.innerHTML=`<h2>Alpha-verziók</h2><a class="version" href="versions/v0.1/index.html">Alpha v0.1</a><a class="version" href="versions/v0.2/index.html">Alpha v0.2 · Budapest</a><a class="version" href="versions/v0.3.1/index.html">Alpha v0.3.1 · Guide View</a><a class="version current" href="index.html">Alpha v0.5.2 · Visual Refresh</a><button class="chip" id="backSettings">Vissza</button>`;els.modalBackdrop.classList.add('show');$('#backSettings').onclick=showSettings}
+function showVersions(){els.modal.innerHTML=`<h2>Alpha-verziók</h2><a class="version" href="versions/v0.1/index.html">Alpha v0.1</a><a class="version" href="versions/v0.2/index.html">Alpha v0.2 · Budapest</a><a class="version" href="versions/v0.3.1/index.html">Alpha v0.3.1 · Guide View</a><a class="version current" href="index.html">Alpha v0.5.3 · Visual Refresh</a><button class="chip" id="backSettings">Vissza</button>`;els.modalBackdrop.classList.add('show');$('#backSettings').onclick=showSettings}
 function renderNotifications(){els.notificationList.innerHTML=state.notifications.map(n=>`<div class="notification-card" data-note="${n.id}"><div class="notification-actions"><span>Elvetés</span><span>Hozzáadás</span></div><div class="notification-body"><b>${n.title}</b><span>${n.text}</span></div></div>`).join('');document.querySelectorAll('.notification-card').forEach(bindNotificationSwipe);$('#aiBadge').textContent=state.notifications.length;$('#aiBadge').style.display=state.notifications.length?'grid':'none'}
 function bindNotificationSwipe(card){const body=card.querySelector('.notification-body');let start=null,last=0;card.onpointerdown=e=>{start=e.clientX;last=e.clientX;card.setPointerCapture?.(e.pointerId)};card.onpointermove=e=>{if(start===null)return;last=e.clientX;body.style.transform=`translateX(${Math.max(-105,Math.min(105,last-start))}px)`};card.onpointerup=()=>{if(start===null)return;const dx=last-start,id=card.dataset.note,n=state.notifications.find(x=>x.id===id);if(dx<-65){state.notifications=state.notifications.filter(x=>x.id!==id);toast('Értesítés törölve');renderNotifications()}else if(dx>65){showNotificationAction(n);body.style.transform=''}else body.style.transform='';start=null};card.onclick=e=>{if(Math.abs(last-(start||last))<8){const n=state.notifications.find(x=>x.id===card.dataset.note);if(n?.placeId){closeNotifications();selectPlace(n.placeId,{fly:true})}}}}
 function showNotificationAction(n){els.modal.innerHTML=`<h2>${n.title}</h2><p>Hová kerüljön?</p><button class="version" id="nextPoint">Legyen a következő pont</button><button class="version" id="listEnd">Menjen a lista végére</button><button class="version" id="manualInsert">Kézi elhelyezés</button><button class="chip" id="cancelNote">Mégse</button>`;els.modalBackdrop.classList.add('show');$('#cancelNote').onclick=()=>els.modalBackdrop.classList.remove('show');$('#nextPoint').onclick=()=>quickInsert(n.placeId,'next');$('#listEnd').onclick=()=>quickInsert(n.placeId,'end');$('#manualInsert').onclick=()=>{els.modalBackdrop.classList.remove('show');closeNotifications();showDay(get(n.placeId).day);toast('Húzd a kívánt helyre, majd a sorrend automatikusan mentődik')}}
@@ -79,26 +55,7 @@ function quickInsert(id,where){const p=get(id);if(!p)return;const day=p.day;let 
 function openNotifications(){renderNotifications();els.notifications.classList.add('open');els.notifications.setAttribute('aria-hidden','false')}
 function closeNotifications(){els.notifications.classList.remove('open');els.notifications.setAttribute('aria-hidden','true')}
 function runSonar(){els.sonar.classList.add('show');toast('Közeli helyek keresése…');setTimeout(()=>{els.sonar.classList.remove('show');const c=map.getCenter(),arr=state.places.map(p=>({...p,d:map.distance(c,[p.lat,p.lon])})).sort((a,b)=>a.d-b.d).slice(0,6);els.title.textContent='Körülöttem';els.sub.textContent='A térkép közepéhez legközelebbi helyek';els.content.innerHTML=arr.map(p=>card(p,{drag:false})).join('');bindCards();setPanel('half')},1500)}
-async function buildDayRoute(day,replace=false){
-  if(replace&&state.dayRoutes.has(day)){
-    map.removeLayer(state.dayRoutes.get(day));
-    state.dayRoutes.delete(day)
-  }
-  const pts=orderedDay(day).filter(p=>p.cat!=='wc');
-  if(pts.length<2)return;
-  const isActive=day===state.activeDay;
-  const line=L.polyline(
-    pts.map(p=>[p.lat,p.lon]),
-    {
-      color:{1:'#c94755',2:'#4d91cf',3:'#55a777'}[day],
-      weight:isActive?2.6:2.0,
-      opacity:isActive?.60:.23,
-      className:'tc-planning-route'
-    }
-  );
-  state.dayRoutes.set(day,line);
-  if(state.filters.days.includes(day))line.addTo(map)
-}
+async function buildDayRoute(day,replace=false){if(replace&&state.dayRoutes.has(day)){map.removeLayer(state.dayRoutes.get(day));state.dayRoutes.delete(day)}const pts=orderedDay(day).filter(p=>p.cat!=='wc');const coords=pts.map(p=>`${p.lon},${p.lat}`).join(';');try{const r=await fetch(`https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`);if(!r.ok)throw 0;const data=await r.json();const rt=data.routes?.[0];if(!rt)throw 0;const line=L.polyline(rt.geometry.coordinates.map(c=>[c[1],c[0]]),{color:{1:'#c8102e',2:'#4da3ff',3:'#45c56f'}[day],weight:4,opacity:.72});state.dayRoutes.set(day,line);if(state.filters.days.includes(day))line.addTo(map)}catch{const line=L.polyline(pts.map(p=>[p.lat,p.lon]),{color:{1:'#c8102e',2:'#4da3ff',3:'#45c56f'}[day],weight:3,opacity:.55,dashArray:'10 8'});state.dayRoutes.set(day,line);if(state.filters.days.includes(day))line.addTo(map)}}
 function bearing(a,b){const φ1=a.lat*Math.PI/180,φ2=b.lat*Math.PI/180,Δλ=(b.lng-a.lng)*Math.PI/180;return(Math.atan2(Math.sin(Δλ)*Math.cos(φ2),Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ))*180/Math.PI+360)%360}
 function updateNav(from,target,d){d=d??map.distance(from,[target.lat,target.lon]);els.navArrow.style.transform=`rotate(${bearing(from,L.latLng(target.lat,target.lon))}deg)`;els.navTitle.textContent=target.name;els.navMeta.textContent=`${d<1000?Math.round(d)+' m':(d/1000).toFixed(1)+' km'} · kb. ${Math.max(1,Math.round(d/80))} perc`;els.navCard.classList.add('show')}
 async function routeFrom(from,target){if(state.navLine)map.removeLayer(state.navLine);try{const r=await fetch(`https://router.project-osrm.org/route/v1/foot/${from.lng},${from.lat};${target.lon},${target.lat}?overview=full&geometries=geojson`);const data=await r.json();const rt=data.routes?.[0];if(!rt)throw 0;state.navLine=L.polyline(rt.geometry.coordinates.map(c=>[c[1],c[0]]),{color:'#c8102e',weight:6,opacity:.92}).addTo(map);map.fitBounds(state.navLine.getBounds(),{paddingTopLeft:[25,150],paddingBottomRight:[25,h(state.panel)+30]});updateNav(from,target,rt.distance)}catch{state.navLine=L.polyline([from,[target.lat,target.lon]],{color:'#c8102e',weight:5,dashArray:'10 8'}).addTo(map);updateNav(from,target)}}
@@ -113,46 +70,9 @@ $('#dayNext').onclick=()=>shiftDay(1);
 $('#dayCurrent').onclick=()=>showDay(state.activeDay);
 const topDay=$('#topDayPicker');if(topDay)topDay.onclick=()=>shiftDay(1);
 const cityPicker=$('#cityPicker');if(cityPicker)cityPicker.onclick=()=>toast('Városválasztó – következő sprintben több várossal');
-document.querySelectorAll('[data-quick-filter]').forEach(b=>b.onclick=()=>{
-  const f=b.dataset.quickFilter;
-  if(f==='more'){showFilters();return}
-  const was=b.classList.contains('active');
-  document.querySelectorAll('[data-quick-filter]').forEach(x=>x.classList.remove('active'));
-  if(!was)b.classList.add('active');
-  // This sprint keeps the existing data/filter engine intact; category chips
-  // are visual quick filters and highlight the relevant markers.
-  state.markers.forEach((m,id)=>{
-    const p=get(id);
-    const group = f==='sight'
-      ? ['sight','building','architecture','memorial','view'].includes(p.cat)
-      : f==='food' ? p.cat==='food'
-      : f==='cafe' ? p.cat==='cafe'
-      : f==='bar' ? p.cat==='bar'
-      : f==='market' ? p.cat==='market'
-      : true;
-    const el=m.getElement();
-    if(el) el.style.opacity = (!was && !group) ? '.26' : '1';
-  });
-  toast(was?'Gyorsszűrő kikapcsolva':`${b.textContent.trim()} kiemelve`);
-});
+document.querySelectorAll('[data-quick-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-quick-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.quickFilter;if(f==='all'){state.filters.utilities=true;state.filters.food=true;applyFilters();toast('Minden réteg látható')}else if(f==='food'){state.filters.food=true;applyFilters();toast('Étkezési helyek kiemelve')}else if(f==='cafe'){toast('Kávézók gyorsszűrő')}else if(f==='sight'){toast('Látnivalók gyorsszűrő')}else showFilters()});
 let daySwipe=null;
 els.dayDock.addEventListener('pointerdown',e=>{if(e.target.closest('.day-arrow'))return;daySwipe={x:e.clientX,last:e.clientX};els.dayDock.setPointerCapture?.(e.pointerId)});
 els.dayDock.addEventListener('pointermove',e=>{if(daySwipe)daySwipe.last=e.clientX});
 els.dayDock.addEventListener('pointerup',()=>{if(!daySwipe)return;const dx=daySwipe.last-daySwipe.x;if(Math.abs(dx)>45)shiftDay(dx<0?1:-1);daySwipe=null});
-els.modalBackdrop.onclick=e=>{if(e.target===els.modalBackdrop)els.modalBackdrop.classList.remove('show')};window.addEventListener('resize',()=>setPanel(state.panel,false));
-// Alpha 0.5.1 startup feedback demo
-const startupOverlay=document.querySelector('#startupOverlay');
-const startupProgress=document.querySelector('#startupProgress');
-if(startupOverlay&&startupProgress){
-  let pct=12;
-  const timer=setInterval(()=>{
-    pct=Math.min(100,pct+Math.floor(Math.random()*19)+8);
-    startupProgress.style.width=pct+'%';
-    if(pct>=100){
-      clearInterval(timer);
-      setTimeout(()=>startupOverlay.classList.add('done'),260);
-    }
-  },150);
-}
-
-init();
+els.modalBackdrop.onclick=e=>{if(e.target===els.modalBackdrop)els.modalBackdrop.classList.remove('show')};window.addEventListener('resize',()=>setPanel(state.panel,false));init();
