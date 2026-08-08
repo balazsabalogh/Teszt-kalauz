@@ -1,10 +1,10 @@
-# Travel Companion Alpha 0.5.0 — Visual Refresh
+# Travel Companion Alpha 0.5.4 — Mockup UI Match
 
-Ez a build elsősorban vizuális teszt. A korábbi Budapest funkciók megmaradnak, a térképes felület, logó és markerek a most elfogadott design irányt próbálják ki.
+Ezt most főleg az alsó panel miatt teszteld.
 
-Telefonon teszteld főleg:
-1. logó olvashatósága és felső értesítési rész;
-2. város + nap választó;
-3. markerek kis méretben és kijelölve;
-4. gyors szűrők;
-5. alsó panel és térkép vizuális hierarchiája.
+Nézd meg:
+1. A panel valóban természetesebb-e, hogy széltől szélig ér.
+2. A mini / info / 1/3 / 2/3 állapotok közti húzás kényelmes-e.
+3. Az 1/3 állapotban jó helyen vannak-e a gyorsszűrők.
+4. A 2/3 lista mennyire hasonlít a régi Dánia útikalauz érzetére.
+5. Nem akad-e össze az alsó húzás az iPhone Home Indicator gesztussal.
