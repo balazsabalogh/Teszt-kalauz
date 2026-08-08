@@ -1,9 +1,9 @@
 {
-  "name": "Travel Companion Alpha 0.5.2",
-  "short_name": "TC 0.5.2",
+  "name": "Travel Companion Alpha 0.5.3",
+  "short_name": "TC 0.5.3",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#08111d",
   "theme_color": "#08111d",
-  "description": "Travel Companion Alpha 0.5.2 Mockup Match"
+  "description": "Grey Theme / Transparent UI Test"
 }

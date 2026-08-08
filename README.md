@@ -1,11 +1,10 @@
-# Travel Companion Alpha 0.5.2 — Mockup Match
+# Travel Companion Alpha 0.5.0 — Visual Refresh
 
-Ez a build a jóváhagyott főképernyő-mockuphoz igazítja a működő térképes prototípust.
+Ez a build elsősorban vizuális teszt. A korábbi Budapest funkciók megmaradnak, a térképes felület, logó és markerek a most elfogadott design irányt próbálják ki.
 
-## Elsősorban ezt teszteld
-- A markerek most jobban hasonlítanak-e a mockupra úgy, hogy a méretük nem változott.
-- A sorszám elég hangsúlyos-e.
-- A kategóriaikon integráltabbnak érződik-e.
-- A közvetlen pont–pont tervező útvonal átláthatóbb-e.
-- Az aktív nap és a többi nap útvonala jól elkülönül-e.
-- A Bottom Sheet / napválasztó iPhone-on kényelmesen húzható-e.
+Telefonon teszteld főleg:
+1. logó olvashatósága és felső értesítési rész;
+2. város + nap választó;
+3. markerek kis méretben és kijelölve;
+4. gyors szűrők;
+5. alsó panel és térkép vizuális hierarchiája.

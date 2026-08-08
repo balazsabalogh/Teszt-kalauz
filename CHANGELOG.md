@@ -1,15 +1,13 @@
-# Changelog
+# Alpha 0.5.3 — Grey Theme / Transparent UI Test
 
-## Alpha 0.5.2 — Mockup Match
+- Tiszta térképnézet: felül csak a középre helyezett Companion logó marad.
+- Világosabb, szürkés/rajzosabb térképi megjelenés.
+- Áttetszőbb marker-közép; kategória fent, sorszám középen.
+- A marker jobb íve a nap színe, a zászló csak a fő logóhoz tartozik.
+- A fő logó magyar zászlós szegmensei élesek, nincs gradient.
+- A Bottom Sheet üres felülete kb. 75%-os glass háttér.
+- A funkcionális kártyák kontrasztosabbak maradnak.
+- Kevésbé lekerekített, geometrikusabb formanyelv.
+- Kompaktabb mini/info állapot az iPhone alsó gesztuszónája fölött.
 
-- A marker teljes mérete változatlan maradt.
-- A kategóriajel közelebb került a marker felső nyílásához.
-- A sorszám nagyobb és hangsúlyosabb lett.
-- A grafit és kategóriaszínű ívek vékonyabb, mockup-szerű arányt kaptak.
-- A kijelölt marker nem nagyul meg, csak finoman lebeg.
-- Tervező módban az útvonal ismét közvetlen pont–pont vonal.
-- Utcakövető útvonal csak az alkalmazáson belüli navigációnál marad.
-- Az aktív nap útvonala erősebb, a többi nap halványabb.
-- A top bar, szűrősor és térképgombok finomítva a mockup arányaihoz.
-- A mini napválasztó továbbra is az alsó Bottom Sheet fogófelülete.
-
+Ez tesztbuild; a Dark / Grey / Pastel témaváltó és a valódi iránytűkapcsolat még nincs véglegesítve.
