@@ -323,3 +323,264 @@
  min-height:52px!important;padding:9px 12px max(10px,env(safe-area-inset-bottom))!important
 }
 .sheet[data-panel="peek"]{--sheet-h:112px!important}
+
+
+/* ============================================================
+   Alpha 0.5.4 — Mockup UI Match
+   The last approved mock-up is the direct visual reference.
+   ============================================================ */
+
+:root{
+  --mock-panel:rgba(10,15,21,.75);
+  --mock-control:rgba(16,23,31,.92);
+  --mock-line:rgba(255,255,255,.11);
+  --mock-red:#d84a55;
+}
+
+/* CLEAN MAP: no permanent top bars, only central identity. */
+.map-context-bar,.map-filter-row{display:none!important;}
+#map{
+  filter:saturate(.78) brightness(.98) contrast(.94)!important;
+}
+
+/* Logo: top centre, below iPhone system area. */
+.top-hub{
+  top:calc(env(safe-area-inset-top) + 9px)!important;
+  left:50%!important;right:auto!important;
+  width:60px!important;height:60px!important;
+  transform:translateX(-50%)!important;
+  background:rgba(10,15,20,.16)!important;
+  border-radius:50%!important;
+  box-shadow:0 5px 15px rgba(0,0,0,.18)!important;
+}
+
+/* Edge-to-edge sheet: NO floating card margins. */
+.sheet{
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  background:var(--mock-panel)!important;
+  border-left:0!important;border-right:0!important;border-bottom:0!important;
+  border-top:1px solid var(--mock-line)!important;
+  box-shadow:0 -9px 24px rgba(0,0,0,.24)!important;
+  backdrop-filter:blur(18px) saturate(112%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(112%)!important;
+  padding-bottom:env(safe-area-inset-bottom)!important;
+}
+.sheet.hidden{transform:translateY(110%)!important}
+
+/* Handle is safely ABOVE the iPhone Home indicator. */
+.handle-zone{
+  height:27px!important;
+  padding-top:7px!important;
+  touch-action:none!important;
+}
+.handle{
+  width:48px!important;height:4px!important;
+  border-radius:2px!important;
+  background:rgba(205,215,225,.60)!important;
+}
+
+/* --- PANEL STATE 0: closed / status only --- */
+.sheet[data-panel="mini"] .sheet-mini-info{
+  display:flex!important;
+}
+.sheet[data-panel="mini"] .sheet-quick-filters,
+.sheet[data-panel="mini"] .sheet-head,
+.sheet[data-panel="mini"] .sheet-content,
+.sheet[data-panel="mini"] .day-dock,
+.sheet[data-panel="mini"] .bottom-tabs{
+  display:none!important;
+}
+
+/* --- PANEL STATE INFO: compact selected-place card --- */
+.sheet[data-panel="peek"] .sheet-mini-info{
+  display:flex!important;
+}
+.sheet[data-panel="peek"] .sheet-quick-filters,
+.sheet[data-panel="peek"] .sheet-head,
+.sheet[data-panel="peek"] .sheet-content,
+.sheet[data-panel="peek"] .day-dock,
+.sheet[data-panel="peek"] .bottom-tabs{
+  display:none!important;
+}
+
+/* --- PANEL STATE 1/3: quick filters + compact route list --- */
+.sheet[data-panel="half"] .sheet-mini-info{display:none!important;}
+.sheet[data-panel="half"] .sheet-quick-filters{display:flex!important;}
+.sheet[data-panel="half"] .sheet-head{display:flex!important;}
+.sheet[data-panel="half"] .sheet-content{display:block!important;}
+.sheet[data-panel="half"] .day-dock{display:none!important;}
+.sheet[data-panel="half"] .bottom-tabs{display:none!important;}
+
+/* --- PANEL STATE 2/3: filters + full daily list + bottom menu --- */
+.sheet[data-panel="full"] .sheet-mini-info{display:none!important;}
+.sheet[data-panel="full"] .sheet-quick-filters{display:flex!important;}
+.sheet[data-panel="full"] .sheet-head{display:flex!important;}
+.sheet[data-panel="full"] .sheet-content{display:block!important;}
+.sheet[data-panel="full"] .day-dock{display:none!important;}
+.sheet[data-panel="full"] .bottom-tabs{display:grid!important;}
+
+/* Info mini card — Denmark-guide geometry, not a floating capsule. */
+.sheet-mini-info{
+  height:calc(100% - 27px);
+  min-height:35px;
+  padding:5px 12px calc(5px + env(safe-area-inset-bottom));
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#eef3f7;
+}
+.mini-info-main{
+  min-width:0;flex:1;display:flex;align-items:center;gap:9px;
+}
+.mini-info-main>div{min-width:0}
+.mini-info-main b{
+  display:block;font-size:13px;font-weight:750;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mini-info-main small{
+  display:block;margin-top:2px;font-size:10px;color:#aab4be;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mini-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--mock-red);flex:0 0 auto;
+}
+.mini-nav-btn{
+  width:36px;height:32px;border:1px solid var(--mock-line);
+  border-radius:4px;background:rgba(17,25,34,.90);color:white;font-size:15px;
+}
+
+/* 1/3 quick filters — horizontal, compact, geometric. */
+.sheet-quick-filters{
+  display:none;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:0 11px 8px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sheet-quick-filters::-webkit-scrollbar{display:none}
+.sheet-quick-filters button{
+  flex:0 0 auto;
+  min-width:63px;height:48px;
+  padding:5px 7px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:5px;
+  background:rgba(18,26,35,.88);
+  color:#cbd4dc;
+  display:grid;place-items:center;gap:2px;
+}
+.sheet-quick-filters button span{font-size:14px;line-height:1}
+.sheet-quick-filters button small{font-size:8px;white-space:nowrap}
+.sheet-quick-filters button.active{
+  background:var(--mock-red);
+  border-color:var(--mock-red);
+  color:#fff;
+}
+
+/* Sheet heading looks like the mock-up day header. */
+.sheet-head{
+  min-height:45px!important;
+  padding:8px 12px!important;
+  border-bottom:1px solid rgba(255,255,255,.07)!important;
+}
+.sheet-head h2{
+  font-size:13px!important;font-weight:760!important;
+  margin:0!important;
+}
+.sheet-head p{
+  font-size:9px!important;margin:2px 0 0!important;color:#aab4be!important;
+}
+
+/* Daily list: flat rows instead of cards floating in empty space. */
+.sheet-content{
+  padding:0 0 calc(70px + env(safe-area-inset-bottom))!important;
+  height:calc(100% - 120px)!important;
+}
+.sheet-content .card{
+  margin:0!important;
+  padding:9px 12px!important;
+  min-height:64px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.075)!important;
+  border-radius:0!important;
+  background:rgba(13,20,28,.40)!important;
+  box-shadow:none!important;
+}
+.sheet-content .card.active{
+  background:rgba(25,34,44,.72)!important;
+  border-left:3px solid var(--mock-red)!important;
+}
+.sheet-content .thumb{
+  width:67px!important;height:48px!important;border-radius:3px!important;
+}
+
+/* General content pieces become flat and geometric. */
+.metric,.fact,.worth-line,.quick,.chip{
+  border-radius:4px!important;
+}
+.metric,.fact,.worth-line{
+  background:rgba(16,24,33,.72)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+}
+
+/* Bottom tabs: edge-to-edge, flat, only in 2/3 state. */
+.bottom-tabs{
+  left:0!important;right:0!important;bottom:0!important;
+  height:calc(58px + env(safe-area-inset-bottom))!important;
+  padding:5px 5px env(safe-area-inset-bottom)!important;
+  border-radius:0!important;
+  background:rgba(8,13,19,.94)!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:none!important;
+}
+
+/* old day dock removed from this visual system */
+.day-dock{display:none!important}
+
+/* Right map controls are simple glass squares / circles, not large pills. */
+.map-tools{
+  right:12px!important;
+  bottom:calc(var(--sheet-h) + 14px)!important;
+  gap:8px!important;
+}
+.map-tools button{
+  width:42px!important;height:42px!important;
+  border-radius:50%!important;
+  background:rgba(10,16,22,.72)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 5px 13px rgba(0,0,0,.20)!important;
+}
+
+/* Marker keeps the accepted system but feels lighter on the map. */
+.marker-ring{
+  background:rgba(7,11,16,.20)!important;
+}
+.marker-type{
+  background:rgba(9,14,20,.76)!important;
+  border-radius:50%!important;
+}
+.marker-tip{filter:drop-shadow(0 3px 3px rgba(0,0,0,.22))}
+
+/* Selected marker: no jarring scale change. */
+.tc-marker-v5.selected .marker-ring{transform:none!important}
+
+/* Guide view also follows geometric dark guide language. */
+.guide-view{
+  background:#0a1017!important;
+}
+.guide-header,.guide-hero,.guide-content .guide-card{
+  border-radius:0!important;
+}
+
+/* iPhone: never put draggable UI directly on the home indicator. */
+@media(max-width:500px){
+  .sheet{padding-bottom:max(env(safe-area-inset-bottom),8px)!important}
+  .sheet-mini-info{padding-bottom:max(env(safe-area-inset-bottom),6px)!important}
+}
