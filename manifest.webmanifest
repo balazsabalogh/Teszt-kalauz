@@ -1,9 +1,8 @@
 {
   "name": "Travel Companion Alpha 0.5.4",
   "short_name": "TC 0.5.4",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#08111d",
-  "theme_color": "#08111d",
-  "description": "Mockup UI Match"
+  "background_color": "#0b1117",
+  "theme_color": "#0b1117"
 }

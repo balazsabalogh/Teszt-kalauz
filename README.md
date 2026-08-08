@@ -1,10 +1,12 @@
-# Travel Companion Alpha 0.5.4 — Mockup UI Match
+# Travel Companion Alpha 0.5.4 — UX Rebuild
 
-Ezt most főleg az alsó panel miatt teszteld.
+Új, mockup-first mobil UX alap.
 
-Nézd meg:
-1. A panel valóban természetesebb-e, hogy széltől szélig ér.
-2. A mini / info / 1/3 / 2/3 állapotok közti húzás kényelmes-e.
-3. Az 1/3 állapotban jó helyen vannak-e a gyorsszűrők.
-4. A 2/3 lista mennyire hasonlít a régi Dánia útikalauz érzetére.
-5. Nem akad-e össze az alsó húzás az iPhone Home Indicator gesztussal.
+Állapotok:
+- csukva: térkép + logo + értesítési sáv
+- Info Mini
+- 1/3: gyorsszűrők + aktuális hely
+- 2/3: nap + helylista + alsó app menü
+- Full: teljes útikalauz
+
+A panel tetején 36 px magas külön drag-zóna van. A bal felső öt apró pont csak tesztkapcsoló: ha az iPhone-on a húzás valamiért még hibázna, egy érintéssel közvetlenül válthatsz az öt állapot között.

@@ -1,101 +1,103 @@
 <!doctype html>
 <html lang="hu">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#08111d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="css/app.css">
-<title>Travel Companion Alpha 0.5.4 – Mockup UI Match</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b1117">
+<title>Travel Companion Alpha 0.5.4</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}html,body,#map{height:100%;margin:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1117;overflow:hidden;color:#f5f7f8}
+#map{position:fixed;inset:0;z-index:1;background:#dfe3df}.leaflet-control-zoom{display:none}.leaflet-tile-pane{filter:saturate(.58) brightness(1.06) contrast(.88)}
+:root{--red:#e74750;--panel:rgba(12,17,22,.93);--line:rgba(255,255,255,.12);--muted:#aeb6bf}
+
+/* LOGO */
+.logo{position:fixed;z-index:1000;top:calc(env(safe-area-inset-top) + 8px);left:50%;transform:translateX(-50%);width:56px;height:56px;border-radius:50%;background:rgba(10,15,20,.74);backdrop-filter:blur(9px);box-shadow:0 5px 18px #0005}
+.logo .flag{position:absolute;inset:4px;border-radius:50%;background:conic-gradient(from -24deg,#ce3039 0 9%,#f5f5f2 9% 14%,#378e59 14% 23%,transparent 23% 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px))}
+.logo .arrow{position:absolute;inset:0;display:grid;place-items:center;font-size:27px;color:#fff;transform:rotate(-42deg);text-shadow:0 2px 7px #000}
+
+/* MAP BUTTONS */
+.mapbtns{position:fixed;z-index:900;right:14px;bottom:112px;display:grid;gap:10px}.mapbtns button{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(18,24,30,.78);backdrop-filter:blur(10px);color:#fff;font-size:21px}
+
+/* MARKERS */
+.tcmarker{width:45px;height:62px;position:relative}.tcmarker .ring{position:absolute;left:4px;top:10px;width:37px;height:37px;border-radius:50%;background:rgba(11,16,21,.82);box-shadow:0 3px 8px #0006}.tcmarker .ring:before{content:"";position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 195deg,transparent 0 8%,#30363c 9% 48%,transparent 49% 55%,var(--day) 56% 94%,transparent 95%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))}.tcmarker .num{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:17px}.tcmarker .cat{position:absolute;top:4px;left:50%;transform:translateX(-50%);height:20px;min-width:20px;padding:0 3px;border-radius:50%;display:grid;place-items:center;background:#11171d;border:1px solid #ffffff24;font-size:10px}.tcmarker .tip{position:absolute;top:45px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:14px solid #f2f4f5;filter:drop-shadow(0 2px 2px #0005)}
+
+/* SHEET */
+.sheet{position:fixed;z-index:950;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);box-shadow:0 -12px 32px #0004;padding-bottom:env(safe-area-inset-bottom);overflow:hidden;transition:height .24s cubic-bezier(.22,.8,.25,1);touch-action:none}
+.sheet.closed{height:calc(51px + env(safe-area-inset-bottom))}.sheet.info{height:calc(105px + env(safe-area-inset-bottom))}.sheet.third{height:34dvh}.sheet.two{height:67dvh}.sheet.full{height:calc(100dvh - env(safe-area-inset-top) - 7px)}
+.drag{position:absolute;z-index:8;left:0;right:0;top:0;height:36px;touch-action:none}.handle{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:44px;height:4px;border-radius:4px;background:#bac2caad}
+
+/* closed notification */
+.notice{position:absolute;top:18px;left:13px;right:13px;height:31px;display:flex;align-items:center;gap:8px;font-size:11px}.dot{width:8px;height:8px;border-radius:50%;background:var(--red)}.notice span{color:#b9c0c7}.notice button{margin-left:auto;width:28px;height:28px;border:0;border-radius:6px;background:#18212a;color:#fff;font-size:19px}.info .notice,.third .notice,.two .notice,.full .notice{display:none}
+
+/* info mini */
+.infocard{display:none;position:absolute;top:28px;left:12px;right:12px;height:64px;background:rgba(45,52,58,.72);border:1px solid var(--line);backdrop-filter:blur(13px);align-items:center;padding:7px;gap:9px}.info .infocard{display:flex}.thumb{width:47px;height:47px;background:#cdd0cf;display:grid;place-items:center;font-size:26px}.infotxt{display:flex;flex-direction:column}.infotxt b{font-size:13px}.infotxt span{font-size:10px;color:#c0c6cc;margin-top:4px}.infocard button{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#171d23;color:white}
+
+/* content */
+.content{display:none;height:100%;overflow:auto;padding:27px 12px 70px}.third .content,.two .content,.full .content{display:block}.dayhead{height:29px;display:flex;align-items:center;justify-content:space-between;font-size:12px}.dayhead span,.dayhead small{color:#b6bdc4}.filters{display:flex;gap:6px;overflow-x:auto;padding:4px 0 9px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filters button{flex:0 0 61px;height:53px;border:1px solid var(--line);border-radius:7px;background:#20272d;color:#f4f5f6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:17px}.filters button span{font-size:8px}.filters .active{background:linear-gradient(#ed5a61,#c72f39);box-shadow:0 5px 13px #de38413b}
+.list{border-top:1px solid #ffffff14}.place{min-height:72px;display:grid;grid-template-columns:3px 22px 1fr 63px;gap:8px;align-items:center;border-bottom:1px solid #ffffff14;padding:6px 0}.place .bar{height:53px;background:var(--red)}.place:nth-child(2) .bar{background:#65a97b}.place:nth-child(3) .bar{background:#d6a73b}.place:nth-child(4) .bar{background:#dd8741}.place:nth-child(5) .bar{background:#4b8dca}.place .n{align-self:start;margin-top:4px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#252d33;font-size:10px;font-weight:700}.pcopy{display:flex;flex-direction:column}.pcopy b{font-size:12px}.pcopy span{font-size:9px;color:#b8bfc6;margin:3px 0}.pcopy small{font-size:9px;color:#e8b24a}.photo{width:63px;height:52px;border-radius:4px;background:#343d44;display:grid;place-items:center;font-size:29px}.third .place:not(:first-child){display:none}
+
+/* nav only 2/3/full */
+.tabs{display:none;position:absolute;left:0;right:0;bottom:env(safe-area-inset-bottom);height:60px;background:#0f151bcc;border-top:1px solid var(--line);backdrop-filter:blur(14px);align-items:center;justify-content:space-around}.two .tabs,.full .tabs{display:flex}.tabs button{border:0;background:none;color:#cbd0d5;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:18px}.tabs span{font-size:8px}.tabs .active{color:var(--red)}.tabs .plus{width:43px;height:43px;border-radius:50%;background:var(--red);color:white;font-size:30px;display:grid;place-items:center}
+
+/* dev state dots - intentionally tiny, removable later */
+.states{position:fixed;z-index:1100;left:9px;top:calc(env(safe-area-inset-top) + 10px);display:flex;gap:5px}.states button{width:7px;height:7px;border:0;border-radius:50%;padding:0;background:#ffffff55}.states button.on{background:#fff}
+</style>
 </head>
 <body>
-<div id="app">
-  <div id="mapView" class="view-layer active">
-    <div id="map"></div>
-    <div class="map-tools" id="mapTools">
-      <button id="locate" aria-label="Aktuális hely">◎</button>
-      <button id="focus" aria-label="Kijelölt pont középre">⌖</button>
-    </div>
-  </div>
+<div id="map"></div>
+<div class="logo"><div class="flag"></div><div class="arrow">➤</div></div>
+<div class="mapbtns"><button id="loc">◎</button><button id="layers">◇</button></div>
 
-  <section id="guideView" class="view-layer guide-view" aria-hidden="true">
-    <header class="guide-header">
-      <div><span class="eyebrow">🇭🇺 Budapest</span><h1>Budapest útikönyv</h1><p>3 laza nap · 24 hely · ugyanaz az útiterv, részletesebb nézetben</p></div>
-      <button class="round-btn" id="guideVersions" aria-label="Verziók">⋯</button>
-    </header>
-    <div class="guide-hero"><div class="hero-copy"><span class="hero-pill">ALPHA v0.5.4</span><h2>Budapest kényelmesen</h2><p>Klasszikus látnivalók, építészet, kávézók, bárok és hasznos megállók három napra rendezve.</p></div></div>
-    <div class="guide-switch"><button data-guide-day="1" class="active">1. nap</button><button data-guide-day="2">2. nap</button><button data-guide-day="3">3. nap</button></div>
-    <main id="guideContent" class="guide-content"></main>
-  </section>
+<section id="sheet" class="sheet closed">
+ <div id="drag" class="drag"><div class="handle"></div></div>
+ <div id="notice" class="notice"><i class="dot"></i><b>Halászbástya</b><span>· 450 m · Nyitva 07:00–22:00</span><button>›</button></div>
+ <div id="infocard" class="infocard"><div class="thumb">🏰</div><div class="infotxt"><b>Halászbástya</b><span>450 m · Nyitva 07:00–22:00</span></div><button>↗</button></div>
+ <div class="content">
+  <div class="dayhead"><div><b>1. nap</b><span> · Budai panoráma</span></div><small>1 / 6</small></div>
+  <div class="filters"><button class="active">⌂<span>Látnivalók</span></button><button>🍴<span>Éttermek</span></button><button>☕<span>Kávézók</span></button><button>♢<span>Bárok</span></button><button>▣<span>Boltok</span></button><button>WC<span>WC</span></button></div>
+  <div class="list" id="list"></div>
+ </div>
+ <nav class="tabs"><button class="active">▱<span>Térkép</span></button><button>⌁<span>Útvonal</span></button><button class="plus">＋</button><button>♡<span>Kedvencek</span></button><button>♙<span>Profil</span></button></nav>
+</section>
+<div class="states" id="states"></div>
 
-  <div class="top-hub" id="topHub">
-    <button class="top-ticker" id="ticker"><span class="ticker-window"><span id="tickerText">Eső várható 16:00 után — a Gellért-hegyet érdemes előrébb hozni</span></span></button>
-    <button class="top-logo" id="context" aria-label="Companion értesítések">
-      <span class="brand-mark country-hu" aria-hidden="true"><span class="brand-dot"></span></span>
-      <span class="ai-badge" id="aiBadge">3</span>
-    </button>
-  </div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const places=[
+ [47.5022,19.0348,'1','⌂','Halászbástya','450 m','07:00–22:00','4,8','3246','🏰'],
+ [47.5019,19.0342,'2','†','Mátyás-templom','600 m','08:00–18:00','4,7','2134','⛪'],
+ [47.4962,19.0396,'3','⌂','Budai Vár','700 m','08:00–20:00','4,6','1867','🏛'],
+ [47.4945,19.0424,'4','♢','Várkert Bazár','850 m','09:00–19:00','4,5','1286','🏰'],
+ [47.4990,19.0436,'5','⌁','Széchenyi Lánchíd','1,0 km','00:00–24:00','4,7','5432','🌉'],
+ [47.5050,19.0552,'6','☕','Lipótvárosi kávézó','1,2 km','07:00–20:00','4,6','892','☕']
+];
+const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([47.4995,19.046],14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+places.forEach(p=>{
+ const icon=L.divIcon({className:'',iconSize:[45,62],iconAnchor:[22,60],html:`<div class="tcmarker" style="--day:#e74750"><div class="ring"><div class="num">${p[2]}</div></div><div class="cat">${p[3]}</div><div class="tip"></div></div>`});
+ L.marker([p[0],p[1]],{icon}).addTo(map);
+});
+L.polyline(places.map(p=>[p[0],p[1]]),{color:'#d84550',weight:3,opacity:.58}).addTo(map);
 
-  <div class="map-context-bar" id="mapContextBar">
-    <button class="glass-pill city-pill" id="cityPicker"><span>🇭🇺</span><b>Budapest</b><small>⌄</small></button>
-    <button class="glass-pill day-pill-top" id="topDayPicker"><b>1. nap</b><small>Budai panoráma</small></button>
-  </div>
-  <div class="map-filter-row" id="mapFilterRow">
-    <button data-quick-filter="all" class="active">Minden</button>
-    <button data-quick-filter="sight">Látnivalók</button>
-    <button data-quick-filter="food">Étkezés</button>
-    <button data-quick-filter="cafe">Kávé</button>
-    <button data-quick-filter="more">•••</button>
-  </div>
+document.getElementById('list').innerHTML=places.map((p,i)=>`<div class="place"><i class="bar"></i><strong class="n">${p[2]}</strong><div class="pcopy"><b>${p[4]}</b><span>${p[5]} · Nyitva ${p[6]}</span><small>★ ${p[7]}　(${p[8]})</small></div><div class="photo">${p[9]}</div></div>`).join('');
 
-  <section class="sheet" id="sheet">
-    <div class="swipe-hints" id="swipeHints"><span>← Útikönyv</span><span>Navigáció →</span></div>
-    <div class="handle-zone" id="handle"><div class="handle"></div></div>
-    <div class="sheet-mini-info" id="sheetMiniInfo">
-      <div class="mini-info-main">
-        <span class="mini-dot"></span>
-        <div><b id="miniInfoTitle">1. nap · Budai panoráma</b><small id="miniInfoMeta">Húzd fel a gyorsszűrőkhöz</small></div>
-      </div>
-      <button class="mini-nav-btn" id="miniNavBtn" aria-label="Navigáció">➤</button>
-    </div>
-    <div class="sheet-quick-filters" id="sheetQuickFilters">
-      <button data-sheet-filter="sight" class="active"><span>🏛</span><small>Látnivalók</small></button>
-      <button data-sheet-filter="food"><span>🍴</span><small>Éttermek</small></button>
-      <button data-sheet-filter="cafe"><span>☕</span><small>Kávézók</small></button>
-      <button data-sheet-filter="bar"><span>◇</span><small>Bárok</small></button>
-      <button data-sheet-filter="market"><span>▣</span><small>Boltok</small></button>
-      <button data-sheet-filter="wc"><span>WC</span><small>WC</small></button>
-    </div>
-    <div class="sheet-head" id="sheetHead"><div class="main"><h2 id="title">Budapest tesztútiterv</h2><p id="sub">3 laza nap · 24 hely</p></div></div>
-    <div class="sheet-content" id="content"></div>
-    <div class="day-dock" id="dayDock">
-      <button class="day-arrow" id="dayPrev" aria-label="Előző nap">‹</button>
-      <button class="day-current" id="dayCurrent"><b>1. nap</b><span>Budai panoráma · belváros</span></button>
-      <button class="day-arrow" id="dayNext" aria-label="Következő nap">›</button>
-    </div>
-    <nav class="bottom-tabs" id="bottomTabs">
-      <button data-tab="map" class="active"><span>⌖</span><small>Térkép</small></button>
-      <button data-tab="plan"><span>☷</span><small>Útiterv</small></button>
-      <button data-tab="info"><span>i</span><small>Infók</small></button>
-      <button data-tab="filters"><span>≡</span><small>Szűrők</small></button>
-      <button data-tab="settings"><span>⚙</span><small>Menü</small></button>
-    </nav>
-  </section>
+const sheet=document.getElementById('sheet'),drag=document.getElementById('drag');
+const names=['closed','info','third','two','full']; let idx=0,sy=0,sh=0,active=false;
+function vh(){return visualViewport?.height||innerHeight}
+function h(i){let v=vh();return [51,105,v*.34,v*.67,v-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat')||0)+7)][i]}
+function setState(i){idx=Math.max(0,Math.min(4,i));names.forEach(n=>sheet.classList.remove(n));sheet.classList.add(names[idx]);sheet.style.height='';document.querySelectorAll('.states button').forEach((b,j)=>b.classList.toggle('on',j===idx))}
+function start(y){active=true;sy=y;sh=sheet.getBoundingClientRect().height;sheet.style.transition='none'}
+function move(y){if(!active)return;sheet.style.height=Math.max(51,Math.min(vh()-7,sh+sy-y))+'px'}
+function finish(){if(!active)return;active=false;sheet.style.transition='';let cur=sheet.getBoundingClientRect().height,b=0,d=1e9;[51,105,vh()*.34,vh()*.67,vh()-7].forEach((x,i)=>{let q=Math.abs(cur-x);if(q<d){d=q;b=i}});setState(b)}
+drag.addEventListener('pointerdown',e=>{drag.setPointerCapture?.(e.pointerId);start(e.clientY);e.preventDefault()});
+drag.addEventListener('pointermove',e=>{if(active){move(e.clientY);e.preventDefault()}});
+drag.addEventListener('pointerup',finish);drag.addEventListener('pointercancel',finish);
+drag.addEventListener('touchstart',e=>start(e.touches[0].clientY),{passive:true});
+drag.addEventListener('touchmove',e=>move(e.touches[0].clientY),{passive:true});
+drag.addEventListener('touchend',finish,{passive:true});
+document.getElementById('notice').onclick=()=>setState(1);document.getElementById('infocard').onclick=()=>setState(2);
 
-
-  <div class="notifications" id="notifications" aria-hidden="true">
-    <div class="notifications-head"><div><b>Companion</b><span>3 új javaslat</span></div><button id="closeNotifications">×</button></div>
-    <div id="notificationList"></div>
-  </div>
-
-  <div class="nav-card" id="navCard"><div class="nav-arrow" id="navArrow">↑</div><div class="nav-copy"><b id="navTitle">Navigáció</b><span id="navMeta"></span></div><button id="stopNav">×</button></div>
-  <div class="sonar" id="sonar"><span></span><span></span><span></span><b>◉</b></div>
-  <div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modal"></div></div>
-  <div class="toast" id="toast"></div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module" src="js/app.js"></script>
-</body>
-</html>
+const states=document.getElementById('states');names.forEach((n,i)=>{let b=document.createElement('button');b.onclick=()=>setState(i);states.appendChild(b)});setState(0);
+document.getElementById('loc').onclick=()=>navigator.geolocation?.getCurrentPosition(pos=>map.setView([pos.coords.latitude,pos.coords.longitude],16));
+</script>
+</body></html>
