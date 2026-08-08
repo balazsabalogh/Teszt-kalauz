@@ -1,18 +1,15 @@
-# Alpha 0.5.4 — Mockup UI Match
+# Changelog
 
-Ez a build a legutóbbi jóváhagyott mockupot veszi közvetlen vizuális referenciának.
+## Alpha 0.5.2 — Mockup Match
 
-- Az alsó panel teljes szélességben, a képernyő széléig ér.
-- Nincs lebegő kártya-hatás a teljes panelen.
-- Geometrikusabb, kevésbé lekerekített vizuális nyelv.
-- 75%-os áttetsző háttér az üres panelterületeken.
-- Panelállapotok:
-  - mini: csak státusz / infósáv,
-  - peek: kompakt helyinfó + navigáció,
-  - 1/3: gyorsszűrők + rövid napi lista,
-  - 2/3: gyorsszűrők + teljes napi lista + alsó menü.
-- A gyorsszűrők a térképről az 1/3+ panelbe kerültek.
-- A teljes térképnézetben fent csak a Companion logó marad.
-- A listaelemek lapos, útikalauz-szerű sorok.
-- Az alsó menü csak 2/3 állapotban jelenik meg.
-- Az iPhone Home Indicator felett külön safe-area marad.
+- A marker teljes mérete változatlan maradt.
+- A kategóriajel közelebb került a marker felső nyílásához.
+- A sorszám nagyobb és hangsúlyosabb lett.
+- A grafit és kategóriaszínű ívek vékonyabb, mockup-szerű arányt kaptak.
+- A kijelölt marker nem nagyul meg, csak finoman lebeg.
+- Tervező módban az útvonal ismét közvetlen pont–pont vonal.
+- Utcakövető útvonal csak az alkalmazáson belüli navigációnál marad.
+- Az aktív nap útvonala erősebb, a többi nap halványabb.
+- A top bar, szűrősor és térképgombok finomítva a mockup arányaihoz.
+- A mini napválasztó továbbra is az alsó Bottom Sheet fogófelülete.
+
