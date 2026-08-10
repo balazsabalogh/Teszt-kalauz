@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0b1117">
-<title>Travel Companion Alpha 0.5.5.1</title>
+<title>Travel Companion Alpha 0.5.5.2</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 *{box-sizing:border-box}html,body,#map{height:100%;margin:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1117;overflow:hidden;color:#f5f7f8}
@@ -186,6 +186,37 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.se
 document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
 document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});
 document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
+</script>
+
+
+<style id="continuous-sheet-patch">
+.sheet{transition:none!important;will-change:height;touch-action:none;overflow:hidden}
+.sheet.dragging{transition:none!important}.sheet.settling{transition:height .26s cubic-bezier(.2,.8,.2,1)!important}
+.handle{height:34px!important;padding-top:8px;cursor:grab;touch-action:none}
+.sheet-scroll{height:calc(100% - 34px);overflow-y:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sheet.full .sheet-scroll{overflow-y:auto;touch-action:pan-y}
+.mapbtns{transition:none!important;will-change:bottom}
+</style>
+<script>
+(() => {
+ const sh=document.querySelector('.sheet'), handle=sh?.querySelector('.handle');
+ if(!sh||!handle)return;
+ let sc=sh.querySelector('.sheet-scroll');
+ if(!sc){sc=document.createElement('div');sc.className='sheet-scroll';[...sh.children].filter(x=>x!==handle).forEach(x=>sc.appendChild(x));sh.appendChild(sc)}
+ const vh=()=>window.innerHeight, minH=()=>Math.max(64,Math.min(88,vh()*.09)), infoH=()=>Math.max(150,Math.min(205,vh()*.22)),
+ thirdH=()=>vh()*.34,twoH=()=>vh()*.66,fullH=()=>vh()*.985,snaps=()=>[minH(),infoH(),thirdH(),twoH(),fullH()];
+ let h=parseFloat(getComputedStyle(sh).height)||minH(),sy=0,sh0=h,drag=false,ly=0,lt=0,vel=0;
+ function apply(n){h=Math.max(minH(),Math.min(fullH(),n));sh.style.height=h+'px';let b=document.querySelector('.mapbtns');if(b)b.style.bottom=(h+12)+'px';sh.classList.toggle('full',h>vh()*.84)}
+ function settle(t){sh.classList.remove('dragging');sh.classList.add('settling');apply(t);setTimeout(()=>sh.classList.remove('settling'),280)}
+ function nearest(){return snaps().reduce((a,b)=>Math.abs(b-h)<Math.abs(a-h)?b:a)}
+ function down(e){if(sh.classList.contains('full')&&sc.scrollTop>0)return;drag=true;sy=e.clientY;sh0=h;ly=e.clientY;lt=performance.now();vel=0;sh.classList.add('dragging');sh.classList.remove('settling');try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}}
+ function move(e){if(!drag)return;let n=performance.now(),dt=Math.max(1,n-lt);vel=(e.clientY-ly)/dt;ly=e.clientY;lt=n;apply(sh0+(sy-e.clientY));e.preventDefault()}
+ function up(){if(!drag)return;drag=false;let ss=snaps(),t;if(Math.abs(vel)>.35)t=vel<0?(ss.find(x=>x>h+18)||ss[ss.length-1]):([...[...ss].reverse()].find(x=>x<h-18)||ss[0]);else t=nearest();settle(t)}
+ handle.addEventListener('pointerdown',down);handle.addEventListener('pointermove',move,{passive:false});handle.addEventListener('pointerup',up);handle.addEventListener('pointercancel',up);
+ sc.addEventListener('pointerdown',e=>{if(e.clientY-sh.getBoundingClientRect().top<58&&sc.scrollTop===0)down(e)});
+ sc.addEventListener('pointermove',move,{passive:false});sc.addEventListener('pointerup',up);sc.addEventListener('pointercancel',up);
+ apply(h);window.addEventListener('resize',()=>apply(Math.min(h,fullH())));
+})();
 </script>
 
 </body></html>
